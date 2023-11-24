@@ -1,0 +1,121 @@
+%-------------------------------------------------------------------------------
+% LATEX TEMPLATE ARTIKEL
+
+%	PACKAGES EN DOCUMENT CONFIGURATIE
+%-------------------------------------------------------------------------------
+
+\documentclass{uva-inf-article}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[title]{appendix}
+
+\usepackage{mathtools} % \shortintertext{}
+%Theoremstyle etc. 
+\usepackage{amsthm}
+\addtolength{\jot}{8pt} % Extra spacing for equations
+% Define new theorem "Definition" 
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}
+% Multicolumn environment 
+\usepackage{multicol}
+% position pictures in text
+\usepackage{float}
+% line break in table cells
+\usepackage{makecell}
+% Color table cells
+\usepackage{xcolor, colortbl}
+% number equations within one section 
+\numberwithin{equation}{section}
+% Format picture captions
+\usepackage[margin={-30pt,20pt}, indention= 2em, font=small,labelfont=bf, labelsep=period]{caption}
+\usepackage{subcaption}
+% Redefine Figure in Multicol 
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+%Algorithms
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} % omit if-end, for-end aso
+
+%\usepackage{natbib}
+\usepackage[style=ieee]{biblatex}
+\addbibresource{references.bib}
+
+%-------------------------------------------------------------------------------
+%	GEGEVENS VOOR IN DE TITEL, HEADER EN FOOTER
+%-------------------------------------------------------------------------------
+
+% Geef je artikel een logische titel die de inhoud dekt.
+\title{Research outline}
+
+% Vul de naam van de opdracht in zoals gegeven door de docent en het type 
+% opdracht, bijvoorbeeld 'technisch rapport' of 'essay'.
+\assignment{}
+\assignmenttype{}
+
+% Vul de volledige namen van alle auteurs in en de corresponderende UvAnetID's.
+\authors{Aaron De Clercq\\aaron.de.clercq@student.uva.nl}
+\uvanetids{14483610}
+
+
+
+% Vul de naam van je tutor, begeleider (mentor), of docent / vakcoördinator in.
+% Vermeld in ieder geval de naam van diegene die het artikel nakijkt!
+\tutor{Ebo Peerbooms}
+\mentor{}
+\docent{Clélia de Mulatier}
+
+% Vul hier de naam van je tutorgroep, werkgroep, of practicumgroep in.
+\group{}
+
+% Vul de naam van de cursus in en de cursuscode, te vinden op o.a. DataNose.
+\course{}
+\courseid{}
+
+% Dit is de datum die op het document komt te staan. Standaard is dat vandaag.
+\date{\today}
+
+%-------------------------------------------------------------------------------
+%	VOORPAGINA 
+%-------------------------------------------------------------------------------
+
+\begin{document}
+\maketitle
+%-------------------------------------------------------------------------------
+%	INHOUDSOPGAVE EN ABSTRACT
+%-------------------------------------------------------------------------------
+% Niet toevoegen bij een kort artikel, zeg minder dan 10 pagina's!
+
+%TC:ignore
+%\tableofcontents
+%\begin{abstract}
+%\end{abstract}
+%TC:endignore
+
+%-------------------------------------------------------------------------------
+%	INHOUD
+%-------------------------------------------------------------------------------
+% Hanteer bij benadering IMRAD: Introduction, Method, Results, Discussion.
+\justifying
+\begin{multicols}{2}
+\input{introduction.tex}
+%\input{theory.tex}
+%\input{methodology.tex}
+%\input{results.tex}
+%\input{conclusion.tex}
+\printbibliography
+\end{multicols}
+%-------------------------------------------------------------------------------
+%	REFERENCES
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+%	BIJLAGEN 
+%-------------------------------------------------------------------------------
+
+
+
+%-------------------------------------------------------------------------------
+\end{document}

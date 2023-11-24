@@ -1,0 +1,36 @@
+\section{Introduction}
+
+In many systems higher-order interactions take place that are vital to understand the system\cite{Battiston2021}.
+As conducting science is considered to be an iterative process between theory and experiment\cite{Box1976}, one approach or starting point of investigating such systems is to infer a model from observations of the system\cite{Nguyen2017}.
+Although the model that fits best given the observed data won't capture the underlying mechanisms of the system perfectly, it does provide more insight into the system and can allow us to make predictions for future observations.
+When the microscopic elements of the system can be approximated as spin variables, the Ising model has been used to infer patterns from high-dimensional datasets\cite{Nguyen2017}.
+A priori we can't know which interactions are relevant, which means that we would have to consider all possible models with every possible combination of interactions. 
+As the number of models scales superexponentially with the number of microscopic variables\cite{Beretta2018}, finding the best fit model is unfeasible for most systems.
+
+\subsubsection*{Restrict the search to MCMs}
+
+\begin{itemize}
+    \item Considering all possible models is unfeasible.
+    \item Previously, search restricted to only pairwise interactions, assumed to be a good approximation but by definition no higher-order interactions.
+    \item Approach to consider only simple models, because they are easily falsifiable and capture only the essence of the data. Contrast with big neural networks in Machine learning (Universal approximators)
+    \item Turns out that pairwise models are not simple\cite{Beretta2018} but MCMs are so search restricted to MCMs\cite{Demulatier2020}.
+\end{itemize}
+
+\subsubsection*{Why do we want to extend the model selection from binary to discrete data?}
+
+Every microscopic variable in the system can be in one of many states instead of two states which results in a more accurate description for some systems.
+It has been mentioned that depending on the nature of the system the restriction of binarizing the data is too restrictive\cite{Nguyen2017}, but some concrete examples should be given.
+
+\subsubsection*{How was previously dealt with discrete data?}
+
+Inference of Potts model. So far I can only find work where search was restricted to pairwise interactions\cite{Barton2016}.
+
+\subsubsection*{Why do we use Bayesian model selection?}
+
+The following references give an overview of different modelling selection methods and criteria such as AIC and BIC:
+
+\begin{itemize}
+    \item \citetitle{Zucchini2000}\cite{Zucchini2000}
+    \item \citetitle{Ding2018}\cite{Ding2018}
+\end{itemize}
+
