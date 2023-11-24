@@ -1,0 +1,8 @@
+name: mcm_discrete
+dependencies:
+  - python
+  - matplotlib
+  - numpy
+  - scipy
+  - ipykernel
+prefix: ./envs
