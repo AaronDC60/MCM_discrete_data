@@ -22,7 +22,7 @@ class ising_model:
         # Generate all pairwise operators in integer representation
         self.spin_op = self.generate_all_operators(2)
         # List that contains all modelparameters (hi, Jij)
-        self.model_param = np.random.rand(self.n_var + (self.n_var * (self.n_var - 1)) // 2)
+        self.param = np.random.rand(self.n_var + (self.n_var * (self.n_var - 1)) // 2)
         # List containing the model distribution
         self.model_distr = np.zeros(2**self.n_var)
         self.calc_model_distr()
@@ -57,29 +57,7 @@ class ising_model:
         # Convert string to integer representation
         return np.array([int(i, 2) for i in states[1:]])
     
-    def count_ones(self, n):
-        """
-        Count the number of ones in the binary representation of an integer n.
-
-        Parameters
-        ----------
-        n : int
-            integer for which the number of ones in the binary representation is calculated
-        
-        Returns
-        -------
-        counter : int
-            number of 1s in the binary representation of n
-        """
-        counter = 0
-        while n:
-            # Check if the last bit is a one
-            counter += n & 1
-            # Shift all bits to the right
-            n >>= 1
-        return counter
-    
-    def set_model_param(self, param):
+    def set_param(self, param):
         """
         Set the values for the model paramaters.
 
@@ -89,9 +67,9 @@ class ising_model:
             new values for the model parameters
         """
         # Check if the length of the input is correct
-        if len(param) != len(self.model_param):
+        if len(param) != len(self.param):
             raise ValueError("Number of model parameters does not match the given input.")
-        self.model_param = param
+        self.param = param
         # Recalculate the model distribution with new parameters
         self.calc_model_distr()
     
@@ -113,17 +91,16 @@ class ising_model:
         <phi_mu> : array
             array with the empirical average for every spinoperator
         """
-        exp_s = np.zeros(len(self.model_param))
+        exp_s = np.zeros(len(self.param))
 
         for obs in self.data:
             for i, op in enumerate(self.spin_op):
-                #value = self.count_ones(obs & op)%2
-                value = bin(obs & op).count('1')
+                value = (obs & op).bit_count()
                 exp_s[i] += ((-1)**(value))
 
         return exp_s / len(self.data)
 
-    def calculate_p(self, state):
+    def calc_p(self, state):
         """
         Calculate the (non-normalized) probability for a given state.
 
@@ -140,15 +117,14 @@ class ising_model:
         value = 0
 
         for i, op in enumerate(self.spin_op):
-            #value += self.model_param[i] * (-1)**(self.count_ones(state & op)%2)
-            value += self.model_param[i] * (-1)**bin(state & op).count('1')
+            value += self.param[i] * (-1)**(state & op).bit_count()
 
         return np.exp(value)
 
     def calc_model_distr(self):
         """Calculate the model distribution for the current model parameters."""
         for state in range(2**self.n_var):
-            self.model_distr[state] = self.calculate_p(state)
+            self.model_distr[state] = self.calc_p(state)
         self.model_distr /= np.sum(self.model_distr)
     
     def calc_exp_model(self):
@@ -160,12 +136,11 @@ class ising_model:
         <phi_mu> : array
             expected value for every spinoperator
         """
-        exp_s = np.zeros(len(self.model_param))
+        exp_s = np.zeros(len(self.param))
 
         for state in range(2**self.n_var):
             for i, op in enumerate(self.spin_op):
-                #exp_s[i] += (self.model_distr[state] * (-1)**(self.count_ones(state & op)%2))
-                exp_s[i] += (self.model_distr[state] * (-1)**bin(state & op).count('1'))
+                exp_s[i] += (self.model_distr[state] * (-1)**(state & op).bit_count())
         
         return exp_s
 
@@ -205,7 +180,7 @@ class ising_model:
         
         return jacobian
     
-    def f_x(self, model_param):
+    def f_x(self, param):
         """
         Function to minimize ((KL divergence) in the steepest descent algorithm.
 
@@ -220,11 +195,11 @@ class ising_model:
             KL divergence
         """
         # Set new parameters (+ recalculate model distribution)
-        self.set_model_param(model_param)
+        self.set_param(param)
         # Calculate new KL divergence with the empirical distribution
         return self.calc_KL_div()
     
-    def grad_f(self, model_param):
+    def grad_f(self, param):
         """
         Gradient of the function to minimize in the steepest descent algorithm.
 
@@ -239,11 +214,11 @@ class ising_model:
             Jacobian for the given model parameters
         """
         # Set new parameters (+ recalculate model distribution)
-        self.set_model_param(model_param)
+        self.set_param(param)
         # Calculate the new gradient
         return self.calc_jacobian()
 
-    def fit_model(self, n_iter = 500):
+    def fit_param(self, n_iter = 500):
         """
         Find model parameters using the steepest descent algorithm.
 
@@ -254,15 +229,15 @@ class ising_model:
         """
         for _ in range(n_iter):
 
-            model_param = self.model_param
+            param = self.param
             s = - self.calc_jacobian()
             # perform a linesearch
-            result = scipy.optimize.line_search(self.f_x, self.grad_f, model_param, s)
+            result = scipy.optimize.line_search(self.f_x, self.grad_f, param, s)
             alpha = result[0]
 
             # Update the model parameters
-            self.set_model_param(model_param + alpha * s)
+            self.set_param(param + alpha * s)
 
             # Check convergence
-            if np.allclose(self.model_param, model_param):
+            if np.allclose(self.param, param):
                 break
