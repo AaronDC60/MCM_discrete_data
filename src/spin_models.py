@@ -1,6 +1,8 @@
 import numpy as np
 import scipy.optimize
 
+from . import utils
+
 class ising_model:
 
     def __init__(self, file):
@@ -19,43 +21,18 @@ class ising_model:
         # Determine the number of variables in the system
         self.n_var = len(data[0])
 
-        # Generate all pairwise operators in integer representation
-        self.spin_op = self.generate_all_operators(2)
-        # List that contains all modelparameters (hi, Jij)
-        self.param = np.random.rand(self.n_var + (self.n_var * (self.n_var - 1)) // 2)
         # List containing the model distribution
         self.model_distr = np.zeros(2**self.n_var)
-        self.calc_model_distr()
+        # Generate all pairwise operators in integer representation
+        self.spin_op = utils.generate_all_operators(self.n_var, 2)
+        # List that contains all modelparameters
+        self.param = np.zeros(len(self.spin_op))
+        self.set_param(np.random.rand(len(self.spin_op)))
 
-        # Calculate the empirical average for the first and second moment
-        self.exp_s_data = self.calc_exp_data()
         # List containing empirical distribution
         self.emp_distr = self.calc_emp_distr()
-    
-    def generate_all_operators(self, n_inter):
-        """
-        Generate all possible spinoperators with at most n_inter variables.
-
-        Parameter
-        ---------
-        n_inter : int
-            Max number of spin variables in a single interaction
-        
-        Returns
-        -------
-        operators : array
-            array containing the spinoperators
-        """
-        # Start with the the all zero operator (removed at the end)
-        states = [self.n_var*'0']
-        for i in range(self.n_var):
-            for state in states[:]:
-                # Generate new state with the ith bit equal to one if the current number of bits is low enough
-                if state.count('1') < n_inter:
-                    states.append(state[:self.n_var-i-1] + '1' + state[self.n_var-i:])
-        
-        # Convert string to integer representation
-        return np.array([int(i, 2) for i in states[1:]])
+        # Calculate the empirical average for the first and second moment
+        self.exp_s_data = self.calc_exp_data()
     
     def set_param(self, param):
         """
@@ -67,7 +44,7 @@ class ising_model:
             new values for the model parameters
         """
         # Check if the length of the input is correct
-        if len(param) != len(self.param):
+        if len(param) != len(self.spin_op):
             raise ValueError("Number of model parameters does not match the given input.")
         self.param = param
         # Recalculate the model distribution with new parameters
@@ -91,41 +68,17 @@ class ising_model:
         <phi_mu> : array
             array with the empirical average for every spinoperator
         """
-        exp_s = np.zeros(len(self.param))
-
-        for obs in self.data:
-            for i, op in enumerate(self.spin_op):
-                value = (obs & op).bit_count()
-                exp_s[i] += ((-1)**(value))
-
-        return exp_s / len(self.data)
-
-    def calc_p(self, state):
-        """
-        Calculate the (non-normalized) probability for a given state.
-
-        Parameters
-        ----------
-        s : int
-            state represented as integer
-        
-        Returns
-        -------
-        p_s : float
-            probability of state s
-        """
-        value = 0
-
-        for i, op in enumerate(self.spin_op):
-            value += self.param[i] * (-1)**(state & op).bit_count()
-
-        return np.exp(value)
+        exp_data = utils.fwht(self.emp_distr)
+        return exp_data[self.spin_op]
 
     def calc_model_distr(self):
         """Calculate the model distribution for the current model parameters."""
-        for state in range(2**self.n_var):
-            self.model_distr[state] = self.calc_p(state)
-        self.model_distr /= np.sum(self.model_distr)
+        g = np.zeros(2**self.n_var)
+        g[self.spin_op] = self.param
+
+        energy = utils.fwht(g)
+        model_distr = np.exp(energy)
+        self.model_distr = model_distr / np.sum(model_distr)
     
     def calc_exp_model(self):
         """
@@ -136,13 +89,8 @@ class ising_model:
         <phi_mu> : array
             expected value for every spinoperator
         """
-        exp_s = np.zeros(len(self.param))
-
-        for state in range(2**self.n_var):
-            for i, op in enumerate(self.spin_op):
-                exp_s[i] += (self.model_distr[state] * (-1)**(state & op).bit_count())
-        
-        return exp_s
+        exp_model = utils.fwht(self.model_distr)
+        return exp_model[self.spin_op]
 
     def calc_KL_div(self):
         """
@@ -153,11 +101,10 @@ class ising_model:
         kl_div : float
             KL divergence
         """
-        kl_div = 0
+        div = self.emp_distr / self.model_distr
+        log = np.log(div, out=np.zeros_like(div), where=div!=0)
 
-        for i in range(2**self.n_var):
-            if self.emp_distr[i] != 0:
-                kl_div -= (self.emp_distr[i] * np.log(self.model_distr[i] / self.emp_distr[i]))
+        kl_div = self.emp_distr @ log
 
         return kl_div
 
@@ -170,15 +117,8 @@ class ising_model:
         jacobian : array
             Jacobian given the current model parameters
         """
-        exp_data = self.exp_s_data
-        exp_model = self.calc_exp_model()
-
-        jacobian = np.empty(len(exp_model))
-
-        for i in range(len(jacobian)):
-            jacobian[i] = exp_model[i] - exp_data[i]
-        
-        return jacobian
+        jacobian = utils.fwht(self.model_distr - self.emp_distr)
+        return jacobian[self.spin_op]
     
     def f_x(self, param):
         """
