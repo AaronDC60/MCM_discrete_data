@@ -16,10 +16,10 @@ def test_generate_all_ops():
         utils.generate_all_operators(2, 3)
 
     # 3 variables only empty operator
-    assert(utils.generate_all_operators(3, 0) == [0])
+    assert(len(utils.generate_all_operators(3, 0)) == 0)
     # 4 variables only single-body terms
-    assert(np.all(utils.generate_all_operators(4,1) == [0, 1, 2, 4, 8]))
+    assert(np.all(utils.generate_all_operators(4,1) == [1, 2, 4, 8]))
     # 3 variables only pairwise interactions
-    assert(np.all(utils.generate_all_operators(3, 2) == [0, 1, 2, 3, 4, 5, 6]))
+    assert(np.all(utils.generate_all_operators(3, 2) == [1, 2, 3, 4, 5, 6]))
     # 3 variables all interactions
-    assert(np.all(utils.generate_all_operators(3, 3) == range(0, 3**2 - 1)))
+    assert(np.all(utils.generate_all_operators(3, 3) == range(1, 3**2 - 1)))
