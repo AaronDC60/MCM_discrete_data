@@ -32,9 +32,25 @@ def fwht(a):
         h *= 2
     return wht_a
 
-def generate_all_operators(n_var, n_inter):
+def generate_all_ops(n_var):
     """
-    Generate all possible spinoperators with at most n_inter variables in a system with n_var variables.
+    Generate all possible spinoperators for a system with n_var variables (complete model).
+    
+    Returns
+    -------
+    operators : array
+        array containing the spinoperators
+    """
+    # Start with the the all zero operator
+    states = [0]
+    for i in range(n_var):
+        for state in states[:]:
+            states.append(state + 2**i)
+    return np.array(states[1:])
+
+def generate_ops_upto_order_n(n_var, n_inter):
+    """
+    Generate all possible spinoperators with n_inter as highest order interaction terms in a system with n_var variables.
 
     Parameter
     ---------
@@ -64,3 +80,37 @@ def generate_all_operators(n_var, n_inter):
             if state.bit_count() < n_inter:
                 states.append(state + 2**i)
     return np.array(states[1:])
+
+def generate_partitions(i, n_var, part, all_partitions):
+    """
+    Generate all possible partitions in a system with n_var variables.
+    The variable 'all_partitions' will contain the result at the end.
+
+    i : int
+        index of the next element to add
+    n_var : int
+        total number of variables in the system
+    part : list
+        current partition (start with empty list)
+    all_partitions : list   
+        list that will contain all partitions (start with empty list)
+    """
+    if i == n_var:
+        # All n variables are added to a subpartition (-> complete partition)
+        # Add a copy of the partition
+        all_partitions.append([subpart[:] for subpart in part])
+        return
+    
+    for j in range(len(part)):
+        # Add spinvariable to a subpartition (generate child node) and continue with the next spinvariable
+        part[j].append(i)
+        generate_partitions(i+1, n_var, part, all_partitions)
+        # Remove spin variable from the current subpartition (going back to the parent node in the tree)
+        part[j].pop()
+    
+    # Add spinvariable as new subpartition (generate child node) and continue with the next spinvariable 
+    part.append([i])
+    generate_partitions(i+1, n_var, part, all_partitions)
+    # Remove the current subpartition (going back to the parent node in the tree)
+    part.pop()
+    
