@@ -113,4 +113,3 @@ def generate_partitions(i, n_var, part, all_partitions):
     generate_partitions(i+1, n_var, part, all_partitions)
     # Remove the current subpartition (going back to the parent node in the tree)
     part.pop()
-    

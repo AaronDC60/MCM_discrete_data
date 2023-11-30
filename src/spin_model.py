@@ -24,7 +24,7 @@ class ising_model:
         # List containing the model distribution
         self.model_distr = np.zeros(2**self.n_var)
         # Generate all pairwise operators in integer representation
-        self.spin_op = utils.generate_all_operators(self.n_var, 2)
+        self.spin_op = utils.generate_ops_upto_order_n(self.n_var, 2)
         # List that contains all modelparameters
         self.param = np.zeros(len(self.spin_op))
         self.set_param(np.random.rand(len(self.spin_op)))
