@@ -6,6 +6,23 @@ def test_fwht():
     a = np.array([1,0,1,0,0,1,1,0])
     assert(np.all(utils.fwht(a) == [4,2,0,-2,0,2,0,2]))
 
+def test_gt_state():
+    # sigma1 = s1
+    # sigma2 = s1, s2
+    # sigma3 = s1, s2, s3
+    gt = [1,3,7]
+    assert(utils.gt_state(0, gt) == 0)
+    assert(utils.gt_state(4, gt) == 4)
+    assert(utils.gt_state(5, gt) == 3)
+    assert(utils.gt_state(7, gt) == 5)
+
+def test_gt_model():
+    # s1 = sigma1
+    # s2 = sigma1, sigma2
+    # s3 = sigma2, sigma3
+    gt = [1,3,6]
+    assert(np.all(utils.gt_model([1,2,3,4,5,6,7], gt) == [1,3,2,6,7,5,4]))
+
 def test_complete_model():
     with pytest.raises(TypeError):
         utils.generate_all_ops(3.5)
