@@ -28,6 +28,9 @@ class mcm:
         # Storage for best results
         self.best_mcm = None
         self.best_evidence = 0
+
+        # Storage for best IM
+        self.best_im = None
     
     def calc_log_evidence(self, mcm):
         """
@@ -64,6 +67,61 @@ class mcm:
                 evidence += (math.lgamma(pattern) - math.log(math.sqrt(math.pi)))
         
         return evidence
+
+    def calc_bias(self, op):
+        """
+        Calculate the bias of operator
+        """
+        bias = 0
+        for obs in self.data:
+            # Determine if value for operator is +1 or -1 in this observation
+            bias += ((-1)**(op&obs).bit_count())
+        return abs(bias)
+    
+    def find_best_im(self):
+        """
+        Find the best im (independent model) for the data
+
+        Returns
+        -------
+        best_im : list
+            array that represents the im with the n most biased operators
+        """
+        # Array with the spinoperators in the best IM
+        im = []
+        # Complete model that can be formed with the IM 
+        model_im = []
+
+        # Generate all operators
+        all_ops = utils.generate_all_ops(self.n_var)
+
+        # Find the n most biased operator
+        for _ in range(self.n_var):
+            max_bias = 0
+            most_bias_op = all_ops[0]
+
+            # Loop over all available operators
+            for op in all_ops:
+                # Calculate bias of the operator
+                current_bias = self.calc_bias(op)
+                # Check if this is max biased operator so far
+                if current_bias > max_bias:
+                    most_bias_op = op
+                    max_bias = current_bias
+
+            # Add most biased operator to the best IM
+            im.append(most_bias_op)
+            model_im.append(most_bias_op)
+            all_ops = np.delete(all_ops, np.where(all_ops == most_bias_op))
+
+            # Filter out operators that are not independent from operators in IM basis
+            for op in model_im[:]:
+                comb_op = op^most_bias_op
+                model_im.append(comb_op)
+                all_ops = np.delete(all_ops, np.where(all_ops == comb_op))
+        
+        self.best_im = im
+        return im
     
     def find_best_mcm(self):
         """
@@ -79,7 +137,6 @@ class mcm:
 
         for mcm in self.mcms:
             evidence = self.calc_log_evidence(mcm)
-            print(evidence)
             # Check if this is the best one yet
             if evidence > best_ev:
                 best_ev = evidence
