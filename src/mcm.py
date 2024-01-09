@@ -32,6 +32,33 @@ class mcm:
         # Storage for best IM
         self.best_im = None
     
+    def transform_data(self, gt=None):
+        """
+        Perform a Gauge transformation on the data.
+        Data is transformed in place.
+
+        Parameters
+        ----------
+        gt : array
+            List with the gauge transformation, default is the best IM
+        """
+        if gt is None:
+            # Take the best IM as basis
+            # Check if best IM still needs to be calculated
+            if self.best_im is None:
+                self.find_best_im()
+            gt = self.best_im
+        else:
+            # Check if gt is valid
+            if type(gt) != list and type(gt) != np.ndarray:
+                raise TypeError("The parameter 'gt' should be a list.")
+        
+        new_data = []
+        # Transform every observation in the data
+        for obs in self.data:
+            new_data.append(utils.gt_state(obs, gt))
+        self.data = new_data
+    
     def calc_log_evidence(self, mcm):
         """
         Calculate the log evidence for a given partition
