@@ -95,6 +95,9 @@ def generate_all_ops(n_var):
     operators : array
         array containing the spinoperators
     """
+    if type(n_var) != int:
+        raise TypeError("The parameter 'n_var' must be an integer.")
+    return np.arange(1, 2**n_var)
     # Start with the the all zero operator
     states = [0]
     for i in range(n_var):
