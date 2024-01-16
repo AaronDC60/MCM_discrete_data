@@ -98,12 +98,6 @@ def generate_all_ops(n_var):
     if type(n_var) != int:
         raise TypeError("The parameter 'n_var' must be an integer.")
     return np.arange(1, 2**n_var)
-    # Start with the the all zero operator
-    states = [0]
-    for i in range(n_var):
-        for state in states[:]:
-            states.append(state + 2**i)
-    return np.array(states[1:])
 
 def generate_ops_upto_order_n(n_var, n_inter):
     """
