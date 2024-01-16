@@ -1,0 +1,179 @@
+\section{Theoretical background}
+
+This section covers the theoretical concepts necessary to understand the research project.
+
+\subsection{Spin models}
+
+One approach to represent a system is through a spin model. Assume a given system with $n$ components where a single observation of the system yields one value for every component.
+Such an observation can be seen as a specific state of the system.
+In case that the observations can be binarized, the state of the system can be written as a spin configuration,
+
+\begin{equation}
+    \mathbf{s} = (s_1 \dots s_n),
+\end{equation}
+
+\noindent
+of $n$ spin variables, where every variable takes a value of either +1 or -1.
+
+\noindent
+In a spin configuration, we can express an interaction between a subset $\mu$ of these spins using a spin operator which is defined as the product of all spins in the subset,
+
+\begin{equation}\label{eq:spin_op}
+    \phi^\mu(\mathbf{s}) = \prod_{i \in \mu} s_i.
+\end{equation}
+
+\noindent
+Given that all spin values are either +1 or -1, the spin operator will be +1 if an even number of spins are -1 and it will be -1 if an odd number of spins are -1.
+The sum over all possible spin configurations of a spin operator is equal to zero,
+
+\begin{equation}\label{eq:sum_over_conf}
+    \sum_{\mathbf{s} \in \mathbf{S}} \phi^\mu(\mathbf{s}) = 0,
+\end{equation}
+
+\noindent
+because half of the spin configurations can be written as a spin configuration in the other half with exactly one spinflip.
+In a system with $n$ spin variables, there are $2^n - 1$ possible subsets, which means that there are $2^n - 1$ different spin operators.
+
+\begin{definition}
+    A set of operators, $\Omega$ is called orthogonal if
+
+    \begin{equation}\label{eq:ortho}
+        \frac{1}{2^n} \sum_{\mathbf{s} \in \mathbf{S}} \phi^\mu(\mathbf{s}) \phi^\nu(\mathbf{s}) = \delta_{\mu\nu} \qquad \forall \;\; \phi^\mu, \phi^\nu \in \Omega
+    \end{equation}
+\end{definition}
+
+\begin{definition}
+    A set of operators, $\Omega$ is called complete if
+
+    \begin{equation}\label{eq:complete}
+        \frac{1}{2^n} \sum_{\mu \in \Omega} \phi^\mu(\mathbf{s}) \phi^\mu(\mathbf{s}^\prime) = \delta_{\mathbf{s}\mathbf{s}^\prime},
+    \end{equation}
+    as this yields a unique relation between the spin configuration and the values for every operator in the set.
+\end{definition}
+
+\noindent
+If we define the identity operator, $\phi^0 = 1$, then the set of operators $\Omega_n = \{\phi^\mu(\mathbf{s})\}_{\mu \in \{0 \dots 2^n-1\}}$ is a complete and orthogonal set.
+For orthogonality, we can rewrite Equation \ref{eq:ortho}, use Equation \ref{eq:sum_over_conf} if $\mu$ and $\nu$ are different and use the definition of the identity operator if $\mu$ and $\nu$ are the same.
+
+\begin{align*}
+    \frac{1}{2^n} \sum_{\mathbf{s} \in \mathbf{S}} \phi^\mu(\mathbf{s}) \phi^\nu(\mathbf{s}) &= \frac{1}{2^n} \sum_{\mathbf{s} \in \mathbf{S}} \phi^{\mu \oplus \nu (\mathbf{s})}\\
+    &= \delta_{\mu\nu}
+\end{align*}
+
+\noindent
+To show the completeness of $\Omega_n$, we can plug Equation \ref{eq:spin_op} into Equation \ref{eq:complete} and rewrite the sum over all spin operators as a product of sums using the bitstring representation of the spin operators.
+
+\begin{align*}
+    \frac{1}{2^n} \sum_{\mu \in \Omega_n} \phi^\mu(\mathbf{s}) \phi^\mu(\mathbf{s}^\prime) &= \frac{1}{2^n} \sum_{\mu=0}^{2^n-1} \prod_{i \in \mu} s_i s_i^\prime \\
+    &= \frac{1}{2^n} \sum_{\alpha_1 = 0,1} \dots \sum_{\alpha_n = 0,1} \prod_{i = 1}^{n} (s_i s_i^\prime)^{\alpha_i} \\
+    &= \delta_{\mathbf{s}\mathbf{s}^\prime}
+\end{align*}
+
+\noindent
+If the two spin configurations are the same, $s_i s_i^\prime$ will always be equal to 1 while it will be half of the time +1 and half of the time -1 for two configurations that are different.
+
+\begin{definition}
+    A set of $n$ spin operators that can fully generate $\Omega_n$ by taking linear combinations of the individual spin operators is called a generating set of $\Omega_n$.
+\end{definition}
+
+\begin{definition}
+    A set of spin operators that for which the product of every subset does not yield the identity operator is called a set of independent operators.
+\end{definition}
+
+\noindent
+It was previously mentioned that a spin model can be used to represent system. The idea is that we assume the system to be in some sort of an equilibrium and the observed spin configurations can be seen as sampled from a given probability distribution.
+Usually a probability distribution with an exponential form is chosen,
+
+\begin{equation}\label{eq:prob_distr}
+    p(\mathbf{s}| \mathbf{g}, \mathcal{M}) = \frac{1}{Z(\mathbf{g}, \mathcal{M})} e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})},
+\end{equation}
+
+\noindent
+where the model $\mathcal{M}$ is defined as a subset of $\Omega_n \setminus \{ \phi^0 \}$ and $g_\mu$ a parameter that indicates the strength of the interaction between the spin variables in $\mu$.
+If a subset of spin variables is correlated, then we would expect specific patterns in the corresponding subset of the spin configuration to occur often in the data.
+For example, many observations with values +1,-1 and -1,+1 for two spins that are negatively correlated. 
+Then, the model to describes this system would have to contain the spin operator that corresponds to this subset with a large (positive or negative) parameter to result in an increased probability of configurations with those patterns.
+
+\noindent
+The probability distribution in Equation \ref{eq:prob_distr} is similar to the Boltzmann distribution, which is used in statistical mechanics to describe a system at thermal equilibrium.
+The derivation in Appendix \ref{sec:max_entropy} shows that this distribution can also be seen as the distribution that maximizes the entropy under the constraint that the expected value for every spin operator in the model is equal to their value in the observed data.
+
+\noindent
+As $\Omega_n \setminus \{ \phi^0 \}$ contains $2^n-1$ operators, we can construct $2^{2^n-1}$ different spin models.
+For most systems, searching for the best model among all possible models is unfeasible.
+Therefore, the search is usually limited to of a subset of models.
+One subset that is commonly used is the set of pairwise models where only interactions upto second-order are considered.
+Another subset is the set of minimally complex models (MCMs).
+An MCM is defined as the union of independent complete components (ICCs).
+A given component, $\mathcal{M}_a$, is called complete if
+
+\begin{equation}
+    \mu \oplus \nu \in \mathcal{M}_a \: \forall \: \mu, \nu \in \mathcal{M}_a.
+\end{equation}
+
+\noindent
+A component is called independent from other components if every operator in the component can only be constructed using operators from the same component.
+
+\subsection{Bayesian model selection}
+
+In Bayesian model selection the model that best fits the data corresponds to the model with the largest posterior probability, $P(\mathcal{M} | \mathbf{\hat{s}})$, which is the probability of the model given the dataset $\mathbf{\hat{s}} = (\mathbf{s}^{(1)} \dots \mathbf{s}^{(N)})$ containing N observed configurations.
+Using Bayes' theorem, the posterior probability can be expressed in terms of the evidence, $P(\mathbf{\hat{s}}|\mathcal{M})$, which is the likelihood of the model given the observed dataset.
+
+\begin{equation}
+    P(\mathcal{M} | \mathbf{\hat{s}}) = \frac{P(\mathbf{\hat{s}}|\mathcal{M}) \: P(\mathcal{M}) }{\sum_{\mathcal{M}^\prime}P(\mathbf{\hat{s}}|\mathcal{M}^\prime) \: P(\mathcal{M}^\prime)}
+\end{equation}
+
+\noindent
+The sum in the denominator runs of all the different models that we consider and $P(\mathcal{M})$ is the prior probability of the model.
+Without a preference for any model before the observed data, we choose a uniform prior distribution.
+As a consequence, the model with the largest evidence will be the model with the largest posterior probability.
+Because the likelihood of the model depends on the chosen model parameters, $g_\mu$, we can write is as
+
+\begin{align}
+    P(\mathbf{\hat{s}}|\mathcal{M}) &= \int d\mathbf{g} P(\mathbf{\hat{s}} | \mathbf{g}, \mathcal{M}) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \prod_{i=1}^N P(\mathbf{s}^{(i)} | \mathbf{g}, \mathcal{M}) P_0(\mathbf{g}|\mathcal{M}). \notag
+\end{align}
+
+\noindent
+The probability of a single observations $\mathbf{s}^{(i)}$ for a given model and model parameters is the probability defined in Equation \ref{eq:prob_distr}, which allows us to rewrite the evidence as
+
+\begin{align*}
+    P(\mathbf{\hat{s}}|\mathcal{M}) &= \int d\mathbf{g} \prod_{i=1}^N \frac{1}{Z_\mathbf{g}(\mathcal{M})} \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s}^{(i)}) \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \prod_{i=1}^N \text{exp}\left(\sum_{\mu \in \mathcal{M}} \left[ g_\mu \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{i=1}^N \sum_{\mu \in \mathcal{M}} \left[ g_\mu \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu \sum_{i=1}^N \left[ \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu N \left[ \phi^\mu(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}),
+\end{align*}
+
+\noindent
+where $\phi^\mu(\mathbf{\hat{s}})$ is the empirical average of the operator $\phi^\mu$.
+
+\begin{equation}
+    \phi^\mu(\mathbf{\hat{s}}) = \frac{1}{N} \sum_{i=1}^N \phi^\mu(\mathbf{s}^{(i)})
+\end{equation}
+
+\noindent
+Defining $\mathbf{\phi}(\mathbf{\hat{s}})$ as a vector of length $|\mathcal{M}|$ with the entries of $\phi^\mu(\mathbf{\hat{s}})$ for every operator $\mu$, gives the following expression for the evidence of the model
+
+\begin{equation} \label{eq:evidence}
+    P(\mathbf{\hat{s}}|\mathcal{M}) = \int d\mathbf{g} \: \text{exp}\left( N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}).
+\end{equation}
+
+\noindent
+In this expression we can recognize the log-likelihood of the model parameters given the observed dataset,
+
+\begin{equation} \label{eq:log_likelihood}
+    \log P(\mathbf{\hat{s}} | \mathbf{g}, \mathcal{M}) = N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right].
+\end{equation}
+
+\noindent
+In Appendix \ref{sec:max_log_likelihood} it is shown that for the model parameters that maximize the log-likelihood the expected value for every spin operator considered in the model is equal to the empirical average of that spin operator, which are exactly the used constraints in the construction of the probability distribution that maximizes the entropy.
+
+If the number of observations is large, we can approximate the integral in Equation \ref{eq:evidence} using Laplace's method because the integral will be sharply peaked around the maximum with respect to the model parameters.
+The derivation is given in Appendix \ref{sec:laplace} and allows us to write the log-evidence as
+
+\begin{equation}
+    \log P(\mathbf{\hat{s}}|\mathcal{M}) \approx \log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) -  \frac{|\mathcal{M}|}{2} \log \frac{N}{2 \pi} - \log \left[ \frac{\sqrt{\text{det } \mathbb{J}(\mathbf{g}^\star)}}{P_0(\mathbf{g}^\star|\mathcal{M})} \right]
+\end{equation}
+
+
