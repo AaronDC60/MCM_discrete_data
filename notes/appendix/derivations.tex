@@ -1,0 +1,190 @@
+\appendix
+
+\newpage
+
+\section{Derivations}
+
+\subsection{Maximum entropy models}\label{sec:max_entropy}
+
+The Shannon entropy is defined as 
+
+\begin{equation}
+    S = - \sum_{\mathbf{s}} p(\mathbf{s}) \: \log(p(\mathbf{s})).
+\end{equation}
+
+\noindent
+The first constraint is the normalization of the distribution,
+
+\begin{equation*}
+    \sum_{\mathbf{s}} p(\mathbf{s}) = 1
+\end{equation*}
+
+\noindent
+Next, we have a set of constraints to make sure that the expected value for every spin operator $\phi^\mu$ in the model corresponds to the observed average value of that spin operator,
+
+\begin{equation*}
+    \sum_{\mathbf{s}} \phi^\mu p(\mathbf{s}) = \expval{\phi^\mu}_{data}. \label{eq:constraints}
+\end{equation*}
+
+\noindent
+To find a probability distribution that maximizes the entropy while satisfying the constraints we can construct the following Lagrangian function and set the derivative with respect to $p(\mathbf{s})$ equal to zero.
+
+\begin{equation}
+    \mathcal{L}[p(\mathbf{s})] = S[p(\mathbf{s})] + \lambda_0 \left( \sum_{\mathbf{s}} p(\mathbf{s}) - 1 \right) + \sum_{\mu \in \mathcal{M}} \alpha_\mu \left( \sum_{\mathbf{s}} \phi^\mu \: p(\mathbf{s}) - \expval{\phi^\mu}_{data} \right)\\
+\end{equation}
+
+\noindent
+The derivative of $\mathcal{L}[p(\mathbf{s})]$ with respect to $p(\mathbf{s})$ is
+
+\begin{equation*}
+    \frac{\partial \mathcal{L}[\mathbf{p}]}{\partial p_\mathbf{s}} = \frac{\partial S[\mathbf{p}]}{\partial p_\mathbf{s}} + \lambda_0 \left( \frac{\partial \left( \sum_{\mathbf{s}} p(\mathbf{s}) - 1 \right)}{\partial p_\mathbf{s}}\right) + \sum_{\mu \in \mathcal{M}} \alpha_\mu \left( \frac{\partial \left( \sum_{\mathbf{s}} \phi^\mu \: p(\mathbf{s}) - \expval{\phi^\mu}_{data} \right)}{\partial p_\mathbf{s}} \right) \\
+\end{equation*}
+
+\noindent
+For the first term on the right-hand side we find
+
+\begin{align*}
+    \frac{\partial S[\mathbf{p}]}{\partial p_\mathbf{s}} &= - \frac{\partial \sum_{\mathbf{s}} p(\mathbf{s}) \: \log(p(\mathbf{s}))}{\partial p_\mathbf{s}}\\
+    &= - \frac{\partial \: p_{\mathbf{s}} \: \log(p_{\mathbf{s}})}{\partial p_\mathbf{s}} \\
+    &= - \log(p_{\mathbf{s}}) \frac{\partial p_\mathbf{s}}{\partial p_\mathbf{s}} - p_\mathbf{s} \frac{\partial \log(p_\mathbf{s})}{\partial p_\mathbf{s}} \\
+    &= - \log(p_{\mathbf{s}}) - 1 \notag
+\end{align*}
+
+\noindent
+For the second term on the right-hand side we find
+
+\begin{align*}
+    \lambda_0 \left( \frac{\partial \left( \sum_{\mathbf{s}} p(\mathbf{s}) - 1 \right)}{\partial p_\mathbf{s}}\right) &= \lambda_0 \left( \frac{\partial \sum_{\mathbf{s}} p(\mathbf{s})}{\partial p_\mathbf{s}} -  \frac{\partial \: 1}{{\partial p_\mathbf{s}}}\right) \\
+    &= \lambda_0 \left(\frac{\partial p_\mathbf{s}}{\partial p_\mathbf{s}} - 0 \right) \\
+    &= \lambda_0 \notag
+\end{align*}
+
+\noindent
+For the last term on the right-hand side we find
+
+\begin{align*}
+    \sum_{\mu \in \mathcal{M}} \alpha_\mu \left( \frac{\partial \left( \sum_{\mathbf{s}} \phi^\mu \: p(\mathbf{s}) - \expval{\phi^\mu}_{data} \right)}{\partial p_\mathbf{s}} \right) &= \sum_{\mu \in \mathcal{M}} \alpha_\mu \left( \frac{\partial \sum_{\mathbf{s}} \phi^\mu(\mathbf{s}) p(\mathbf{s})}{\partial p_\mathbf{s}} - \frac{\partial \expval{\phi^\mu}_{data}}{\partial p_\mathbf{s}} \right)\\
+    &= \sum_{\mu \in \mathcal{M}} \alpha_\mu \left( \frac{\partial \phi^\mu(\mathbf{s}) p_{\mathbf{s}}}{\partial p_\mathbf{s}} - 0\right) \\
+    &= \sum_{\mu \in \mathcal{M}} \alpha_\mu \phi^\mu(\mathbf{s})
+\end{align*}
+
+\noindent
+Then, the final expression for the derivative of $\mathcal{L}[p(\mathbf{s})]$ with respect to $p(\mathbf{s})$ is
+
+\begin{equation}
+    \frac{\partial \mathcal{L}[\mathbf{p}]}{\partial p_\mathbf{s}} = - \log(p_{\mathbf{s}}) - 1 + \lambda_0 + \sum_{\mu \in \mathcal{M}} \alpha_\mu \phi^\mu(\mathbf{s}).
+\end{equation}
+
+\noindent
+Setting the derivative of $\mathcal{L}[p(\mathbf{s})]$ with respect to $p(\mathbf{s})$ equal to zero gives the desired form of the probability distribution.
+
+\begin{align*}
+    0 &= \frac{\partial \mathcal{L}[\mathbf{p}]}{\partial p_\mathbf{s}}\\
+    0 &= - \log(p_{\mathbf{s}}) - 1 + \lambda_0 + \sum_{\mu \in \mathcal{M}} \alpha_\mu \phi^\mu(\mathbf{s}) \\
+    \log(p_{\mathbf{s}}) &= - 1 + \lambda_0 + \sum_{\mu \in \mathcal{M}} \alpha_\mu \phi^\mu(\mathbf{s})\\
+    p_{\mathbf{s}} &= e^{\lambda_0 - 1 + \sum_{\mu \in \mathcal{M}} \alpha_\mu \phi^\mu(\mathbf{s})}\\
+    &= e^{\lambda_0 - 1} e^{ \sum_{\mu \in \mathcal{M}} \alpha_\mu \phi^\mu(\mathbf{s})}
+\end{align*}
+
+\noindent
+This expression has the same form as the expression in Equation \ref{eq:prob_distr}. The lagrange multipliers $\alpha_\mu$ have a one-to-one correspondence to interaction strength, $g_\mu$.
+Then, the expression for the partition function becomes
+
+\begin{equation*}
+    Z = e^{1 - \lambda_0}.
+\end{equation*}
+
+\noindent
+Knowing that the probability distribution is normalized this expression can be rewritten,
+
+\begin{align*}
+  &\sum_{\mathbf{s}} p_{\mathbf{s}} = 1, \\
+  &\sum_{\mathbf{s}}  e^{\lambda_0 - 1} e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})} = 1, \\
+  &e^{\lambda_0 - 1} = \frac{1}{\sum_{\mathbf{s}} e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})}},
+\end{align*}
+
+\noindent
+which yields the final form of the probability distribution
+
+\begin{equation}
+  p_{\mathbf{g}}(\mathbf{s}) = \frac{e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})}}{\sum_{\mathbf{s}} e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})}}.
+\end{equation}
+
+\subsection{Expected values at maximum log-likelihood} \label{sec:max_log_likelihood}
+
+Setting the derivative of the log-likelihood in Equation \ref{eq:log_likelihood} with respect to the model parameters $g_\mu$ equal to zero gives,
+
+\begin{align*}
+    0 &= \frac{\partial \log P(\mathbf{\hat{s}} | \mathbf{g}, \mathcal{M})}{\partial g_\mu}, \\
+    &= N \frac{\partial  \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})}}{\partial g_\mu}, \\
+    &= N \left[ \phi^\mu(\mathbf{\hat{s}}) - \frac{1}{Z_\mathbf{g}(\mathcal{M})} \frac{\partial {Z_\mathbf{g}(\mathcal{M})}}{\partial g_\mu} \right], \\
+    &= N \left[ \phi^\mu(\mathbf{\hat{s}}) - \frac{1}{Z_\mathbf{g}(\mathcal{M})} \frac{\partial \sum_{\mathbf{s} \in \mathbf{\hat{s}}} e^{\left(\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s}) \right)}}{\partial g_\mu} \right], \\
+    &= N \left[ \phi^\mu(\mathbf{\hat{s}}) - \frac{1}{Z_\mathbf{g}(\mathcal{M})} \sum_{\mathbf{s} \in \mathbf{\hat{s}}} \phi^\mu(\mathbf{s}) e^{\left(\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s}) \right)} \right], \\
+    &= N \left[ \phi^\mu(\mathbf{\hat{s}}) - \sum_{\mathbf{s} \in \mathbf{\hat{s}}} \phi^\mu(\mathbf{s}) P(\mathbf{s} | \mathbf{g}, \mathcal{M})\right],
+\end{align*}
+
+\noindent
+which shows that at the maximum of the log-likelihood
+
+\begin{equation}
+  \phi^\mu(\mathbf{\hat{s}}) = \sum_{\mathbf{s} \in \mathbf{\hat{s}}} \phi^\mu(\mathbf{s}) P(\mathbf{s} | \mathbf{g}, \mathcal{M}).
+\end{equation}
+
+\subsection{Expression for evidence using Laplace's method} \label{sec:laplace}
+
+Because the value of the integral in Equation \ref{eq:evidence} is dominated by a single contribution at the maximum, we can replace the terms that depend on the model parameters by their second-order Taylor expansion around the model parameters, $\mathbf{g}^\star$, that maximize the evidence.
+
+\begin{align*}
+  N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \approx& \: N  \left[ \mathbf{g}^\star \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g^\star}(\mathcal{M})} \right] + (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \bigr](\mathbf{g}^\star) \\
+&+ \frac{1}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \\
+=& \log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) - \frac{1}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ N \log {Z_\mathbf{g}(\mathcal{M})} \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)
+%=& \log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) - \frac{N}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J}(\mathbf{g}^\star)(\mathbf{g} - \mathbf{g}^\star)
+\end{align*}
+
+\begin{equation*}
+  P_0(\mathbf{g}|\mathcal{M}) \approx \: P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)
+\end{equation*}
+
+\noindent
+Plugging these expansions into the expression for the evidence and using the definition of the Fisher information matrix, which has as entries
+
+\begin{equation}
+    \mathbb{J}_{\mu\nu}(\mathbf{g}) = \frac{\partial^2 \log {Z_\mathbf{g}(\mathcal{M})}}{\partial g_\mu \partial g_\nu},
+\end{equation}
+
+\noindent
+gives the following expression for the evidence.
+\begin{align*}
+    P(\mathbf{\hat{s}}|\mathcal{M}) \approx& \int d\mathbf{g} \: e^{\log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) - \frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
+    & \left( P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right) \\
+   =& \int d\mathbf{g} \: P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M})  e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
+   &\left( P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right) \\
+   =& P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) P_0(\mathbf{g}^\star|\mathcal{M}) \int d\mathbf{g} \: e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
+   &\left(1 + \frac{1}{P_0(\mathbf{g}^\star|\mathcal{M})} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2 P_0(\mathbf{g}^\star|\mathcal{M})} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right)
+\end{align*}
+
+\noindent
+The leading term in this integral is a multidimensional Gaussian integral. Because the Fisher information matrix is symmetric, we can decompose it as,
+
+\begin{equation*}
+    \mathbb{J} = Q \Lambda Q^\intercal,
+\end{equation*}
+
+\noindent
+where Q is an orthonormal matrix that has the linearly independent eigenvectors of $\mathbb{J}$ as columns. Defining a new variable $\mathbf{x} \equiv Q^\intercal (\mathbf{g} - \mathbf{g}^\star)$, allows us to write the integral as a product of 1D Gaussian integrals.
+
+\begin{align*}
+    \int d\mathbf{g} \: e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} &= \int d\mathbf{g} \: e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal Q \Lambda Q^\intercal (\mathbf{g} - \mathbf{g}^\star)}\\
+    &= \int d\mathbf{x} \: e^{-\frac{N}{2}  \mathbf{x}^\intercal \Lambda \mathbf{x}} \\
+    &= \prod_{\mu = 1}^{|\mathcal{M}|} \int dx_\mu e^{-\frac{N}{2} \lambda_\mu x_\mu^2} \\
+    &= \prod_{\mu = 1}^{|\mathcal{M}|} \sqrt{\frac{2 \pi}{N \lambda_\mu}} \\
+    &= \left(\frac{2 \pi}{N}\right)^\frac{|\mathcal{M}|}{2} \frac{1}{\sqrt{\text{det } \mathbb{J}(\mathbf{g}^\star)}}
+\end{align*}
+
+\noindent
+Substituting this into the expression for the log-evidence gives
+
+\begin{align*}
+    \log P(\mathbf{\hat{s}}|\mathcal{M}) &\approx \log \left[ P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) P_0(\mathbf{g}^\star|\mathcal{M}) \left(\frac{2 \pi}{N}\right)^\frac{|\mathcal{M}|}{2}  \frac{1}{\sqrt{\text{det } \mathbb{J}(\mathbf{g}^\star)}} \right]\\
+    &= \log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) -  \frac{|\mathcal{M}|}{2} \log \frac{N}{2 \pi} - \log \left[ \frac{\sqrt{\text{det } \mathbb{J}(\mathbf{g}^\star)}}{P_0(\mathbf{g}^\star|\mathcal{M})} \right]
+\end{align*}
