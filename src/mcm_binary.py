@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import copy
 
 from . import utils
 
@@ -96,6 +97,62 @@ class mcm:
             bias += ((-1)**(op&obs).bit_count())
         return abs(bias)
     
+    def divide_and_conquer(self, mcm, final_mcm, print_search=False):
+        """
+        Finding best MCM using the divide and conquer approach.
+
+        Parameters
+        ----------
+        mcm : list
+            starting MCM (one component) to split up
+        final_mcm : list
+            variable to store the resulting MCM
+        print_search : boolean, default False
+            Option to print all the encounterd MCMs and their evidence
+        """
+        # Current MCM is the best one so far
+        best_mcm = mcm
+        best_ev = self.calc_log_evidence(mcm)
+        # Print result
+        if print_search:
+            print(mcm, best_ev)
+        # Add new subpartition
+        mcm.append([])
+        while True:
+            # Try each one in the first subpartition as a member of the second subpartition to see if evidence increases
+            for i in range(len(mcm[0])):
+                # Hard copy
+                new_mcm = [mcm[i][:] for i in range(len(mcm))]
+                # Move ith member from first to second partition
+                new_mcm[0] = mcm[0][:i] + mcm[0][i+1:]
+                new_mcm[1].append(mcm[0][i])
+                # Check the evidence
+                ev = self.calc_log_evidence(new_mcm)
+                if ev > best_ev:
+                    best_mcm = [new_mcm[i][:] for i in range(len(new_mcm))]
+                    best_ev = ev
+                # Print result
+                if print_search:
+                   print(new_mcm, ev)
+                new_mcm[1].pop()
+
+            # Continue with moving another one only if evidence improved
+            if best_mcm != mcm:
+                mcm = [best_mcm[i][:] for i in range(len(best_mcm))]
+            else:
+                break
+            
+        if len(best_mcm[1]) == 0:
+            # Starting MCM was the best option
+            final_mcm.append(best_mcm[0])
+        else:
+            # Try to split up each of the resulting partitions
+            for subpart in best_mcm:
+                if len(subpart) != 1:
+                    self.divide_and_conquer([subpart], final_mcm, print_search)
+                else:
+                    final_mcm.append(subpart)
+    
     def find_best_im(self, max_interactions=None):
         """
         Find the best IM (independent model) for the data and transform data in that basis
@@ -161,14 +218,16 @@ class mcm:
             self.transform_data(im)
         return self.best_im
     
-    def find_best_mcm(self, method='exhaustive'):
+    def find_best_mcm(self, method='exhaustive', print_search=False):
         """
         Find the best mcm for the data
 
         Parameters
         ----------
         method : str, default 'exhaustive'
-            Searching method (options: 'exhaustive', 'greedy')
+            Searching method (options: 'exhaustive', 'greedy', 'divide_and_conquer')
+        print_search : boolean, default False
+            Option to print all the encounterd MCMs and their evidence
 
         Returns
         -------
@@ -176,7 +235,7 @@ class mcm:
             array that represents the mcm with the highest evidence
         """
         best_ev = -np.inf
-        best_mcm = self.mcms[0]
+        best_mcm = None
 
         if method == 'exhaustive':
             for mcm in self.mcms:
@@ -185,6 +244,9 @@ class mcm:
                 if evidence > best_ev:
                     best_ev = evidence
                     best_mcm = mcm
+                # Print result
+                if print_search:
+                    print(mcm, evidence)
             
             self.best_mcm = best_mcm
             self.best_evidence = best_ev
@@ -193,6 +255,9 @@ class mcm:
             # Start with best IM
             current_mcm = self.mcms[-1] 
             best_ev = self.calc_log_evidence(current_mcm)
+            # Print result
+            if print_search:
+                print(current_mcm, best_ev)
 
             # Best MCM so far (hard copy of IM)
             best_mcm = [current_mcm[i] for i in range(len(current_mcm))]
@@ -214,6 +279,9 @@ class mcm:
                             # Update best MCM found so far
                             best_mcm = [new_mcm[i] for i in range(len(new_mcm))]
                             best_ev = ev
+                        # Print result
+                        if print_search:
+                            print(new_mcm, ev)
 
                 # Stop procedure if current MCM is the best one
                 if best_mcm == current_mcm:
@@ -221,8 +289,16 @@ class mcm:
                 else:
                     # Update current MCM
                     current_mcm = [best_mcm[i] for i in range(len(best_mcm))]
+        
+        elif method == 'divide_and_conquer':
+            # Start with best all basis operators in one partition
+            current_mcm = copy.deepcopy(self.mcms[0])
+            best_mcm = []
+
+            self.divide_and_conquer(current_mcm, best_mcm, print_search)
+            best_ev = self.calc_log_evidence(best_mcm)
         else:
-            raise NameError('Unknown method. Options are "exhaustive" and "greedy".')
+            raise NameError('Unknown method. Options are "exhaustive", "greedy" and "divide_and_conquer.')
         
         self.best_mcm = best_mcm
         self.best_evidence = best_ev
