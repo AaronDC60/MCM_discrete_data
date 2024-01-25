@@ -71,10 +71,12 @@ class mcm:
         evidence : float
             log evidence for the given mcm
         """
+        N = len(self.data)
         evidence = 0
         for subpart in mcm:
-            evidence += (math.lgamma(2**(len(subpart)-1)) - math.lgamma(len(self.data) + 2**(len(subpart)-1)))
-
+            r = len(subpart)
+            evidence += (math.lgamma(2**(r-1)) - math.lgamma(N + 2**(r-1)))
+            
             # Extract the part of the dataset that represents the subpartition
             relevant_bits = np.sum([2**i for i in subpart])
             part_data = list(map(lambda x: x&relevant_bits, self.data))
@@ -122,23 +124,22 @@ class mcm:
             # Try each one in the first subpartition as a member of the second subpartition to see if evidence increases
             for i in range(len(mcm[0])):
                 # Hard copy
-                new_mcm = [mcm[i][:] for i in range(len(mcm))]
+                new_mcm = copy.deepcopy(mcm)
                 # Move ith member from first to second partition
                 new_mcm[0] = mcm[0][:i] + mcm[0][i+1:]
                 new_mcm[1].append(mcm[0][i])
                 # Check the evidence
                 ev = self.calc_log_evidence(new_mcm)
                 if ev > best_ev:
-                    best_mcm = [new_mcm[i][:] for i in range(len(new_mcm))]
+                    best_mcm = new_mcm
                     best_ev = ev
                 # Print result
                 if print_search:
                    print(new_mcm, ev)
-                new_mcm[1].pop()
 
             # Continue with moving another one only if evidence improved
             if best_mcm != mcm:
-                mcm = [best_mcm[i][:] for i in range(len(best_mcm))]
+                mcm = best_mcm
             else:
                 break
             
@@ -253,14 +254,14 @@ class mcm:
         
         elif method == 'greedy':
             # Start with best IM
-            current_mcm = self.mcms[-1] 
+            current_mcm = self.mcms[-1]
             best_ev = self.calc_log_evidence(current_mcm)
             # Print result
             if print_search:
                 print(current_mcm, best_ev)
 
             # Best MCM so far (hard copy of IM)
-            best_mcm = [current_mcm[i] for i in range(len(current_mcm))]
+            best_mcm = current_mcm
 
             # Apply hierarchical merging procedure
             while len(current_mcm) > 1:
@@ -269,15 +270,15 @@ class mcm:
                 for i in range(n_icc):
                     for j in range(i+1, n_icc):
                         # Start from current MCM
-                        new_mcm = [current_mcm[i] for i in range(len(current_mcm))]
+                        new_mcm = copy.deepcopy(current_mcm)
                         # Concatenate two ICCs
-                        new_mcm[i] = [k for l in [new_mcm[i], new_mcm[j]] for k in l]
+                        new_mcm[i] += new_mcm[j]
                         del new_mcm[j]
 
                         ev = self.calc_log_evidence(new_mcm)
                         if ev > best_ev:
                             # Update best MCM found so far
-                            best_mcm = [new_mcm[i] for i in range(len(new_mcm))]
+                            best_mcm = new_mcm
                             best_ev = ev
                         # Print result
                         if print_search:
@@ -288,7 +289,7 @@ class mcm:
                     break
                 else:
                     # Update current MCM
-                    current_mcm = [best_mcm[i] for i in range(len(best_mcm))]
+                    current_mcm = best_mcm
         
         elif method == 'divide_and_conquer':
             # Start with best all basis operators in one partition
