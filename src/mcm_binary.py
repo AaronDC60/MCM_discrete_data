@@ -98,7 +98,7 @@ class mcm:
             # Determine if value for operator is +1 or -1 in this observation
             bias += ((-1)**(op&obs).bit_count())
         return abs(bias)
-    
+
     def divide_and_conquer(self, mcm, final_mcm, print_search=False):
         """
         Finding best MCM using the divide and conquer approach.
@@ -112,36 +112,49 @@ class mcm:
         print_search : boolean, default False
             Option to print all the encounterd MCMs and their evidence
         """
-        # Current MCM is the best one so far
+        # Variable to store best MCM after split (even if no overall improvement occured)
+        tmp_best_mcm = mcm
+        # Variable to store best MCM (only if overall improvement occured)
         best_mcm = mcm
         best_ev = self.calc_log_evidence(mcm)
         # Print result
         if print_search:
-            print(mcm, best_ev)
-        # Add new subpartition
+            print('Start splitting procedure: ', mcm, best_ev)
+        # Add new subparition
         mcm.append([])
-        while True:
-            # Try each one in the first subpartition as a member of the second subpartition to see if evidence increases
-            for i in range(len(mcm[0])):
-                # Hard copy
-                new_mcm = copy.deepcopy(mcm)
-                # Move ith member from first to second partition
-                new_mcm[0] = mcm[0][:i] + mcm[0][i+1:]
-                new_mcm[1].append(mcm[0][i])
-                # Check the evidence
+
+        # Keep moving components to second partition
+        while len(tmp_best_mcm[0]) > 2:
+            # Start again from previously best split
+            tmp_best_ev = -np.inf
+            current_mcm = tmp_best_mcm
+
+            # Try each one in the first subpartition as a member of the second partition
+            for i in range(len(current_mcm[0])):
+                # Make a hard copy
+                new_mcm = copy.deepcopy(current_mcm)
+                # Move the ith component from first to second partition
+                new_mcm[0] = current_mcm[0][:i] + current_mcm[0][i+1:]
+                new_mcm[1].append(current_mcm[0][i])
                 ev = self.calc_log_evidence(new_mcm)
-                if ev > best_ev:
-                    best_mcm = new_mcm
-                    best_ev = ev
                 # Print result
                 if print_search:
-                   print(new_mcm, ev)
+                    print(new_mcm, ev)
+                # Check if this is the best split
+                if ev > tmp_best_ev:
+                    tmp_best_mcm = new_mcm
+                    tmp_best_ev = ev
+                    # Print result
+                    if print_search:
+                        print('New intermediate best: ', tmp_best_mcm,tmp_best_ev)
 
-            # Continue with moving another one only if evidence improved
-            if best_mcm != mcm:
-                mcm = best_mcm
-            else:
-                break
+            # Check if the best split is an overall improvement
+            if tmp_best_ev > best_ev:
+                best_mcm = tmp_best_mcm
+                best_ev = tmp_best_ev
+                # Print result
+                if print_search:
+                    print('New overall best: ', best_mcm, best_ev)
             
         if len(best_mcm[1]) == 0:
             # Starting MCM was the best option
@@ -299,7 +312,7 @@ class mcm:
             self.divide_and_conquer(current_mcm, best_mcm, print_search)
             best_ev = self.calc_log_evidence(best_mcm)
         else:
-            raise NameError('Unknown method. Options are "exhaustive", "greedy" and "divide_and_conquer.')
+            raise NameError('Unknown method. Options are "exhaustive", "greedy" and "divide_and_conquer".')
         
         self.best_mcm = best_mcm
         self.best_evidence = best_ev
