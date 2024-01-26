@@ -4,6 +4,7 @@ dependencies:
   - matplotlib
   - numpy
   - scipy
+  - pandas
   - ipykernel
   - numba
   - pytest
