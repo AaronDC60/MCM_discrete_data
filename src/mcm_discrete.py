@@ -33,7 +33,7 @@ class mcm:
 
     def reset_data(self):
         """Transform data back to the original data."""
-        self.data, _ = utils.process_data_int(self.file)
+        self.data, _ = utils.process_data_array(self.file)
     
     def calc_log_evidence(self, mcm):
         """
@@ -51,8 +51,7 @@ class mcm:
         """
         evidence = 0
         for subpart in mcm:
-            evidence += (math.lgamma(self.q**(len(subpart))/2) - math.lgamma(len(self.data) + self.q**(len(subpart))/2) - (self.q**(len(subpart))/2) * math.log(math.pi))
-
+            evidence += (math.lgamma(self.q**(len(subpart))/2) - math.lgamma(len(self.data) + self.q**(len(subpart))/2) )
             # Extract the part of the dataset that represents the subpartition
             part_data = part_data = self.data[:,subpart]
             # Count the number of times the different patterns occur
@@ -60,7 +59,7 @@ class mcm:
             counts = counts + 0.5
 
             for pattern in counts:
-                evidence += math.lgamma(pattern)
+                evidence += (math.lgamma(pattern) - 0.5 * math.log(math.pi))
         
         return evidence
     
