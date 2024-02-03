@@ -54,7 +54,7 @@ class mcm:
         for subpart in mcm:
             evidence += (math.lgamma(self.q**(len(subpart))/2) - math.lgamma(len(self.data) + self.q**(len(subpart))/2) )
             # Extract the part of the dataset that represents the subpartition
-            part_data = part_data = self.data[:,subpart]
+            part_data = self.data[:,subpart]
             # Count the number of times the different patterns occur
             counts = np.unique(part_data, return_counts=True, axis=0)[1]
             counts = counts + 0.5
