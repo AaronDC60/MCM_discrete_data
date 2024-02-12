@@ -1,0 +1,1 @@
+add_library(Search_Algorithms divide_and_conquer.cpp greedy.cpp exhaustive.cpp)

@@ -1,0 +1,1 @@
+add_library(Model data.cpp evidence.cpp partition.cpp)
