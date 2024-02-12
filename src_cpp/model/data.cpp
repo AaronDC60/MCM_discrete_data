@@ -1,8 +1,6 @@
 #include "model.h"
 
 mcm data_processing(string file){
-    cout << "Data processing" << endl;
-
     // Open file
     ifstream myfile(file);
 
@@ -17,15 +15,25 @@ mcm data_processing(string file){
 
     // Number of variables
     int n = line.length() - 1;
+    line = line.substr(0, n);
 
     // Store dataset as vector of strings
-    vector<string> data;
-    //data.push_back(line.substr(0, n));
-    data.push_back(line);
+    vector<vector<int>> data;
+
+    vector<int> observation;
+    for (char element : line){
+        observation.push_back(strtol(&element, NULL, 10));
+    }
+
+    data.push_back(observation);
 
     while (getline(myfile, line)) {
-        //data.push_back(line.substr(0, n));
-        data.push_back(line);
+        line = line.substr(0, n);
+        vector<int> observation;
+        for (char element : line){
+            observation.push_back(strtol(&element, NULL, 10));
+        }
+        data.push_back(observation);
     }
 
     mcm model;
