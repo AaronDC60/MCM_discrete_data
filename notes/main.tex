@@ -7,10 +7,12 @@
 \documentclass{uva-inf-article}
 \usepackage[english]{babel}
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{angles,quotes}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[title]{appendix}
-
+\usepackage{lscape}
 \usepackage{booktabs}
 \usepackage{mathtools} % \shortintertext{}
 \usepackage{physics}
@@ -46,6 +48,9 @@
 \addbibresource{references.bib}
 
 \allowdisplaybreaks
+
+\usepackage{framed}
+
 
 %-------------------------------------------------------------------------------
 %	GEGEVENS VOOR IN DE TITEL, HEADER EN FOOTER
@@ -92,8 +97,13 @@
 % Hanteer bij benadering IMRAD: Introduction, Method, Results, Discussion.
 \justifying
 
+% Theory section
 \input{theory/theory_section}
+\input{theory/bms}
+
+% Appendix
 \input{appendix/derivations}
+\input{appendix/spin_model_examples.tex}
 
 
 %\printbibliography

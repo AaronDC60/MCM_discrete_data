@@ -1,0 +1,77 @@
+\newpage
+
+\section{Examples of spin models}
+
+\subsection{2-state,2-spin system}\label{sec:2spin_2states}
+
+Consider a two-spin system and a corresponding complete model. Then, there are 4 different configurations that can be observed and, including $\phi^0$, there are 4 spin operators.
+The probability for the 4 different configurations can be written as
+
+\begin{align*}
+    p(s_1=1, s_2=1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 \phi^0(s_1=1, s_2=1) + g_1 \phi^1(s_1=1, s_2=1) + g_2 \phi^2(s_1=1, s_2=1) + g_3 \phi^3(s_1=1, s_2=1)},\\
+    p(s_1=-1, s_2=1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 \phi^0(s_1=-1, s_2=1) + g_1 \phi^1(s_1=-1, s_2=1) + g_2 \phi^2(s_1=-1, s_2=1) + g_3 \phi^3(s_1=-1, s_2=1)},\\
+    p(s_1=1, s_2=-1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 \phi^0(s_1=1, s_2=-1) + g_1 \phi^1(s_1=1, s_2=-1) + g_2 \phi^2(s_1=1, s_2=-1) + g_3 \phi^3(s_1=1, s_2=-1)},\\
+    p(s_1=-1, s_2=-1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 \phi^0(s_1=-1, s_2=-1) + g_1 \phi^1(s_1=-1, s_2=-1) + g_2 \phi^2(s_1=-1, s_2=-1) + g_3 \phi^3(s_1=-1, s_2=-1)},\\
+\end{align*}
+
+\noindent
+which can be rewritten as
+
+\begin{align*}
+    p(s_1=1, s_2=1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 + g_1 + g_2 + g_3},\\
+    p(s_1=-1, s_2=1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 - g_1 + g_2 - g_3},\\
+    p(s_1=1, s_2=-1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 + g_1 - g_2 - g_3},\\
+    p(s_1=-1, s_2=-1) &= \frac{1}{Z(\mathbf{g})} e^{g_0 - g_1 - g_2 + g_3}.
+\end{align*}
+
+\noindent
+In case of a complete model, we can define a spin operator matrix,
+
+\begin{equation}
+    \mathbf{S}^{(2)} = \begin{bmatrix}
+        \phi^0(s=1) & \phi^1(s=1)\\
+        \phi^0(s=-1) & \phi^1(s=-1)
+    \end{bmatrix} = \begin{bmatrix}
+        1 & 1\\
+        1 & -1
+    \end{bmatrix},
+\end{equation}
+
+\noindent
+such that the probability of a configuration can be written as an element of the matrix vector product,
+
+\begin{equation}\label{eq:relation_p_g}
+    \mathbf{p} = \exp\left(\bigotimes_{i = 1}^{n} \mathbf{S}^{(2)} \cdot \mathbf{g}\right).
+\end{equation}
+
+\noindent
+In a two-spin system, the matrix $\bigotimes_{i = 1}^{n} \mathbf{S}^{(2)}$ is equal to
+
+\begin{align*}
+    \scriptstyle
+    \mathbf{S}^{(2)} \otimes \mathbf{S}^{(2)} &= \begin{bmatrix}
+        \phi^0(s_2=1) & \phi^1(s_2=1)\\
+        \phi^0(s_2=-1) & \phi^1(s_2=-1)
+    \end{bmatrix} \otimes \begin{bmatrix}
+        \phi^0(s_1=1) & \phi^1(s_1=1)\\
+        \phi^0(s_1=-1) & \phi^1(s_1=-1)
+    \end{bmatrix}\\
+    &= \begin{bmatrix}
+        \scriptstyle \phi^0(s_2=1) \phi^0(s_1=1) & \scriptstyle \phi^0(s_2=1) \phi^1(s_1=1) & \scriptstyle \phi^1(s_2=1) \phi^0(s_1=1) & \scriptstyle \phi^1(s_2=1) \phi^1(s_1=1)\\
+        \scriptstyle \phi^0(s_2=1) \phi^0(s_1=-1) & \scriptstyle \phi^0(s_2=1) \phi^1(s_1=-1) & \scriptstyle \phi^1(s_2=1) \phi^0(s_1=-1) & \scriptstyle \phi^1(s_2=1) \phi^1(s_1=-1)\\
+        \scriptstyle \phi^0(s_2=-1) \phi^0(s_1=1) & \scriptstyle \phi^0(s_2=-1) \phi^1(s_1=1) & \scriptstyle \phi^1(s_2=-1) \phi^0(s_1=1) & \scriptstyle \phi^1(s_2=-1) \phi^1(s_1=1)\\
+        \scriptstyle \phi^0(s_2=-1) \phi^0(s_1=-1) & \scriptstyle \phi^0(s_2=-1) \phi^1(s_1=-1) & \scriptstyle \phi^1(s_2=-1) \phi^0(s_1=-1) & \scriptstyle \phi^1(s_2=-1) \phi^1(s_1=-1)
+    \end{bmatrix}\\
+    &= \begin{bmatrix}
+        \scriptstyle \phi^0(s_2=1, s_1=1) & \scriptstyle \phi^1(s_2=1, s_1=1) & \scriptstyle \phi^2(s_2=1, s_1=1) & \scriptstyle \phi^3(s_2=1, s_1=1)\\
+        \scriptstyle \phi^0(s_2=1, s_1=-1) & \scriptstyle \phi^1(s_2=1, s_1=-1) & \scriptstyle \phi^2(s_2=1, s_1=-1) & \scriptstyle \phi^3(s_2=1, s_1=-1)\\
+        \scriptstyle \phi^0(s_2=-1, s_1=1) & \scriptstyle \phi^1(s_2=-1, s_1=1) & \scriptstyle \phi^2(s_2=-1, s_1=1) & \scriptstyle \phi^3(s_2=-1, s_1=1)\\
+        \scriptstyle \phi^0(s_2=-1, s_1=-1) & \scriptstyle \phi^1(s_2=-1, s_1=-1) & \scriptstyle \phi^2(s_2=-1, s_1=-1) & \scriptstyle \phi^3(s_2=-1, s_1=-1)
+    \end{bmatrix}\\
+    &= \begin{bmatrix}
+        1 & 1 & 1 & 1\\
+        1 & -1 & 1 & -1\\
+        1 & 1 & -1 & -1\\
+        1 & -1 & -1 & 1
+    \end{bmatrix}
+\end{align*}
