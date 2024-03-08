@@ -8,7 +8,7 @@
 \usepackage[english]{babel}
 \usepackage{graphicx}
 \usepackage{tikz}
-\usetikzlibrary{angles,quotes}
+\usetikzlibrary{decorations.pathreplacing, angles,quotes}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[title]{appendix}
@@ -35,6 +35,7 @@
 \numberwithin{equation}{section}
 % Format picture captions
 \usepackage[margin={-30pt,20pt}, indention= 2em, font=small,labelfont=bf, labelsep=period]{caption}
+%\usepackage{caption}
 \usepackage{subcaption}
 % Redefine Figure in Multicol 
 \newenvironment{Figure}
@@ -103,7 +104,10 @@
 
 % Appendix
 \input{appendix/derivations}
+\clearpage
 \input{appendix/spin_model_examples.tex}
+\clearpage
+\input{appendix/polar_coordinates.tex}
 
 
 %\printbibliography

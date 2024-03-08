@@ -110,47 +110,6 @@ which yields the final form of the probability distribution
   p_{\mathbf{g}}(\mathbf{s}) = \frac{e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})}}{\sum_{\mathbf{s}} e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})}}.
 \end{equation}
 
-\begin{landscape}
-\newgeometry{top=2.5cm, left=2cm,bottom=1cm, right=2cm}
-\subsection{Spin operator matrix three-state system with two spins} \label{sec:discrete_spin_op_matrix}
-
-\begin{align*}
-    & \hspace{-.2cm} \scriptstyle \mathbf{S}^{(3)} \otimes \mathbf{S}^{(3)} = \\
-    & \hspace{-.3cm} \begin{bmatrix}
-        \phi^0(\alpha=0) & \phi^1(\alpha=0) & {(\phi^1)}^2(\alpha=0)\\
-        \phi^0(\alpha=1) & \phi^1(\alpha=1) & {(\phi^1)}^2(\alpha=1)\\
-        \phi^0(\alpha=2) & \phi^1(\alpha=2) & {(\phi^1)}^2(\alpha=2)\\
-    \end{bmatrix} \otimes \begin{bmatrix}
-        \phi^0(\alpha=0) & \phi^1(\alpha=0) & {(\phi^1)}^2(\alpha=0)\\
-        \phi^0(\alpha=1) & \phi^1(\alpha=1) & {(\phi^1)}^2(\alpha=1)\\
-        \phi^0(\alpha=2) & \phi^1(\alpha=2) & {(\phi^1)}^2(\alpha=2)\\
-    \end{bmatrix}=\\
-    & \hspace{-.3cm} \begin{bmatrix}
-        \scriptstyle \phi^0(\alpha_2=0) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=0) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=0) {(\phi^1)}^2(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) {(\phi^1)}^2(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) {(\phi^1)}^2(\alpha_1=0) \\ 
-        \scriptstyle \phi^0(\alpha_2=0) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=0) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=0) {(\phi^1)}^2(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) {(\phi^1)}^2(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) {(\phi^1)}^2(\alpha_1=1) \\
-        \scriptstyle \phi^0(\alpha_2=0) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=0) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=0) {(\phi^1)}^2(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=0) {(\phi^1)}^2(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=0) {(\phi^1)}^2(\alpha_1=2) \\ 
-        \scriptstyle \phi^0(\alpha_2=1) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=1) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=1) {(\phi^1)}^2(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) {(\phi^1)}^2(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) {(\phi^1)}^2(\alpha_1=0) \\ 
-        \scriptstyle \phi^0(\alpha_2=1) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=1) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=1) {(\phi^1)}^2(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) {(\phi^1)}^2(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) {(\phi^1)}^2(\alpha_1=1) \\ 
-        \scriptstyle \phi^0(\alpha_2=1) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=1) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=1) {(\phi^1)}^2(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=1) {(\phi^1)}^2(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=1) {(\phi^1)}^2(\alpha_1=2) \\
-        \scriptstyle \phi^0(\alpha_2=2) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=2) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=2) {(\phi^1)}^2(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) {(\phi^1)}^2(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) \phi^0(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) \phi^1(\alpha_1=0) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) {(\phi^1)}^2(\alpha_1=0) \\
-        \scriptstyle \phi^0(\alpha_2=2) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=2) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=2) {(\phi^1)}^2(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) {(\phi^1)}^2(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) \phi^0(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) \phi^1(\alpha_1=1) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) {(\phi^1)}^2(\alpha_1=1) \\
-        \scriptstyle \phi^0(\alpha_2=2) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=2) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^0(\alpha_2=2) {(\phi^1)}^2(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle \phi^1(\alpha_2=2) {(\phi^1)}^2(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) \phi^0(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) \phi^1(\alpha_1=2) & \hspace{-4pt} \scriptstyle {(\phi^1)}^2(\alpha_2=2) {(\phi^1)}^2(\alpha_1=2)  
-    \end{bmatrix}\scriptstyle = \hspace{-.7cm}\\
-    & \hspace{-.3cm} \begin{bmatrix}
-        1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\
-        1 & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & 1 & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & 1 & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} \\
-        1 & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & 1 & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & 1 & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} \\
-        1 & 1 & 1 & e^{-\frac{2\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{4\pi i}{3}} \\
-        1 & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & 1 & e^{-\frac{4\pi i}{3}} & 1 & e^{-\frac{2\pi i}{3}} \\
-        1 & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{2\pi i}{3}} & 1 & e^{-\frac{4\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & 1 \\
-        1 & 1 & 1 & e^{-\frac{4\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{2\pi i}{3}} \\
-        1 & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{4\pi i}{3}} & 1 & e^{-\frac{2\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & 1 \\
-        1 & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & e^{-\frac{4\pi i}{3}} & e^{-\frac{2\pi i}{3}} & 1 & e^{-\frac{2\pi i}{3}} & 1 & e^{-\frac{4\pi i}{3}} \\
-    \end{bmatrix}\\
-\end{align*}
-\restoregeometry
-\end{landscape}
-
 \subsection{Expected values at maximum log-likelihood} \label{sec:max_log_likelihood}
 
 Setting the derivative of the log-likelihood in Equation \ref{eq:log_likelihood} with respect to the model parameters $g_\mu$ equal to zero gives,

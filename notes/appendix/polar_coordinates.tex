@@ -1,0 +1,182 @@
+\subsection{Model parameters in polar coordinates}\label{sec:polar_coord}
+
+An alternative is to write the model parameters in polar coordinates,
+
+\begin{equation}
+    g_{\boldsymbol{\mu}} = r_{\boldsymbol{\mu}} e^{i \theta_{\boldsymbol{\mu}}}.
+\end{equation}
+
+\noindent
+Then, the constraints are
+
+\begin{equation}
+    \begin{cases}
+        r_{-\boldsymbol{\mu}} = r_{\boldsymbol{\mu}}\\
+        \theta_{-\boldsymbol{\mu}} = -\theta_{\boldsymbol{\mu}}
+    \end{cases}
+    .
+\end{equation}
+
+\noindent
+The function, $S(\alpha)$ of all three states can be expressed as
+
+\begin{align*}
+    S(\alpha=0) &= r_1 e^{i \theta_1} \phi^1(\alpha=0) + r_2 e^{i \theta_2} \phi^2(\alpha=0),\\
+    S(\alpha=1) &= r_1 e^{i \theta_1} \phi^1(\alpha=1) + r_2 e^{i \theta_2} \phi^2(\alpha=1),\\
+    S(\alpha=2) &= r_1 e^{i \theta_1} \phi^1(\alpha=2) + r_2 e^{i \theta_2} \phi^2(\alpha=2).
+\end{align*}
+
+\noindent
+Plugging in the values for the spin operators and using the constraints gives,
+
+\begin{align*}
+    S(\alpha=0) &= r_1 e^{i \theta_1} + r_2 e^{i \theta_2},\\
+    &= r_1 e^{i \theta_1} + r_1 e^{-i \theta_1}, \\
+    &= r_1 \left[ \cos\left( \theta_1 \right) + i \sin\left( \theta_1 \right) + \cos\left( \theta_1 \right) - i \sin\left( \theta_1 \right) \right],\\
+    &= 2r_1 \cos\left( \theta_1 \right),\\
+    S(\alpha=1) &= r_1 e^{i \theta_1} e^{\frac{2\pi i}{3}} + r_2 e^{i \theta_2} e^{\frac{4\pi i}{3}},\\
+    &= r_1 e^{i\left( \frac{2\pi}{3} + \theta_1 \right)} + r_2 e^{-i \left(\frac{2\pi}{3} - \theta_2 \right)},\\
+    &= r_1 e^{i\left( \frac{2\pi}{3} + \theta_1 \right)} + r_1 e^{-i \left(\frac{2\pi}{3} + \theta_1 \right)},\\
+    &= r_1 \left[ \cos\left( \frac{2\pi}{3} + \theta_1 \right) + i \sin \left( \frac{2\pi}{3} + \theta_1 \right) + \cos\left( \frac{2\pi}{3} + \theta_1 \right) - i \sin \left( \frac{2\pi}{3} + \theta_1 \right) \right],\\
+    &= 2 r_1 \cos\left( \frac{2\pi}{3} + \theta_1 \right),\\
+    S(\alpha=2) &= r_1 e^{i \theta_1} e^{\frac{4\pi i}{3}} + r_2 e^{i \theta_2} e^{\frac{2\pi i}{3}},\\
+    &= r_1 e^{i\left( \frac{4\pi}{3} + \theta_1 \right)} + r_2 e^{-i \left(\frac{4\pi}{3} - \theta_2 \right)},\\
+    &= r_1 e^{i\left( \frac{4\pi}{3} + \theta_1 \right)} + r_1 e^{-i \left(\frac{4\pi}{3} + \theta_1 \right)},\\
+    &= r_1 \left[ \cos\left( \frac{4\pi}{3} + \theta_1 \right) + i \sin \left( \frac{4\pi}{3} + \theta_1 \right) + \cos\left( \frac{4\pi}{3} + \theta_1 \right) - i \sin \left( \frac{4\pi}{3} + \theta_1 \right) \right],\\
+    &= 2 r_1 \cos\left( \frac{4\pi}{3} + \theta_1 \right).
+\end{align*}
+
+\noindent 
+From these expressions, we can see that $S(\alpha=0)$ is maximized when $\theta_1$ is a multiple of $2\pi$. $S(\alpha=1)$ is maximized when $\frac{2\pi}{3} + \theta_1$ is a multiple of $2\pi$ or equivalent when $\theta_1$ is equal to $-\frac{2\pi}{3}$.
+$S(\alpha=2)$ is maximized when $\frac{4\pi}{3} + \theta_1$ is a multiple of $2\pi$ or equivalent when $\theta_1$ is equal to $\frac{-4\pi}{3}$.
+In general, $S(\alpha)$ and thus the probability of state $\alpha$ is maximally increased by a pair of conjugate spin operators when the complex conjugate of the parameters are aligned with the spin operators applied on the state $\alpha$.
+
+\noindent
+In Figure \ref{fig:s_alpha}, a graphical representation of $S({\alpha})$ is shown for a 3-state,1-spin system where the complex conjugate of $g_1$ aligns mostly with $\phi^1(\alpha=1)$.
+Due to the constraints on the parameters, the complex conjugate of $g_2$ aligns mostly with $\phi^2(\alpha=1)$.
+Figure \ref{fig:s_alpha_1} shows that this alignment results in a large positive real contribution to $S(\alpha = 1)$ of both $g_1 \phi^1(\alpha=1)$ and $g_2 \phi^2(\alpha=1)$. 
+Note that the complex contributions of $g_1 \phi^1(\alpha=1)$ and $g_2 \phi^2(\alpha=1)$ cancel each other, which makes $S(\alpha=1)$ a real value.
+In Figure \ref{fig:s_alpha_2}, the same thing is shown for $S(\alpha=2)$. Because the action of the spin operator on the state is different, both spin operators will have a negative real contribution to $S(\alpha=2)$.
+Again, the complex contributions cancel each other due to the constraints on the model parameters.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
+            %Origin
+            \coordinate (O) at (0,0);
+            %Coordinate (1,0)
+            \coordinate (X) at (1,0);
+            % draw the coordinates
+            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
+            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
+    
+            % draw the unit circle
+            \draw[thick] (0cm,0cm) circle(1cm);
+    
+            %line for alpha = one state
+            \draw[blue] (0cm,0cm) -- (120:1cm);
+            % text at the end
+            \draw (120:1.18cm) node[fill=white] {$\phi^1$};
+            %draw angle
+            \coordinate (phi1) at (120:1cm);
+            \draw pic[->,"\footnotesize $\frac{2\pi}{3}$",draw=black,angle radius=30,angle eccentricity=1.25] {angle=X--O--phi1};
+    
+            %line for alpha = two state
+            \draw[red] (0cm,0cm) -- (240:1cm);
+            % text at the end
+            \draw (240:1.18cm) node[fill=white] {$\phi^2$};
+    
+            %g1
+            \draw[dashed, blue] (0cm,0cm) -- (260:1cm);
+            % text at the end
+            \draw (260:1.15cm) node[fill=white] {$g_1$};
+            % draw angle
+            \coordinate (G1) at (260:1cm);
+            \draw pic[->,"\footnotesize $\theta_1$",draw=black,angle radius=20,angle eccentricity=1.3] {angle=X--O--G1};
+    
+            %g2
+            \draw[dashed, red] (0cm,0cm) -- (100:1cm);
+            % text at the end
+            \draw (100:1.15cm) node[fill=white] {$g_2$};
+    
+            %g1 phi1
+            \draw[dashdotted, blue] (0cm,0cm) -- (20:1cm);
+            % dot at end point
+            \filldraw[blue] (20:1cm) circle(0.6pt);
+            % text at the end
+            \draw (20:1.22cm) node[fill=white] {$g_1 \phi^1$};
+            %draw angle
+            \coordinate (G1_PHI1) at (20:1cm);
+            \draw pic[->,"\footnotesize $\frac{2\pi}{3} +\theta_1$",draw=black,angle radius=40,angle eccentricity=1.5] {angle=X--O--G1_PHI1};
+    
+            %g2 phi2
+            \draw[dashdotted, red] (0cm,0cm) -- (340:1cm);
+            % dot at end point
+            \filldraw[red] (340:1cm) circle(0.6pt);
+            % text at the end
+            \draw (340:1.22cm) node[fill=white] {$g_2 \phi^2$};
+    
+            % draw the horizontal and vertical coordinates
+            \draw (1.4cm,0cm)  node[above=1pt] {$\Re$}
+                (0cm,1.4cm)  node[fill=white] {$\Im$};
+        \end{tikzpicture}}
+        \caption{$S(\alpha = 1)$}\label{fig:s_alpha_1}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
+            % draw the coordinates
+            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
+            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
+    
+            % draw the unit circle
+            \draw[thick] (0cm,0cm) circle(1cm);
+
+            %line for alpha = one state
+            \draw[blue] (0cm,0cm) -- (240:1cm);
+            % text at the end
+            \draw (240:1.18cm) node[fill=white] {$\phi^1$};
+    
+            %line for alpha = two state
+            \draw[red] (0cm,0cm) -- (120:1cm);
+            % text at the end
+            \draw (120:1.18cm) node[fill=white] {$\phi^2$};
+    
+            %g1
+            \draw[dashed, blue] (0cm,0cm) -- (260:1cm);
+            % text at the end
+            \draw (260:1.15cm) node[fill=white] {$g_1$};
+    
+            %g2
+            \draw[dashed, red] (0cm,0cm) -- (100:1cm);
+            % text at the end
+            \draw (100:1.15cm) node[fill=white] {$g_2$};
+    
+            %g1 phi1
+            \draw[dashdotted, blue] (0cm,0cm) -- (140:1cm);
+            % dot at end point
+            \filldraw[blue] (140:1cm) circle(0.6pt);
+            % text at the end
+            \draw (140:1.22cm) node[fill=white] {$g_1 \phi^1$};
+    
+            %g2 phi2
+            \draw[dashdotted, red] (0cm,0cm) -- (220:1cm);
+            % dot at end point
+            \filldraw[red] (220:1cm) circle(0.6pt);
+            % text at the end
+            \draw (220:1.22cm) node[fill=white] {$g_2 \phi^2$};
+
+    
+            % draw the horizontal and vertical coordinates
+            \draw (1.4cm,0cm)  node[above=1pt] {$\Re$}
+                (0cm,1.4cm)  node[fill=white] {$\Im$};
+        \end{tikzpicture}}
+        \caption{$S(\alpha = 2)$}\label{fig:s_alpha_2}
+    \end{subfigure}
+    \caption{Graphical representation of $S({\alpha})$ of a 3-state,1-spin system. The parameters $g_1$ and $g_2$ are chosen such that $g_1$ slightly deviates from the complex conjugate of $\phi^1(\alpha=1)$. The dots indicate the contributions to $S(\alpha)$.}
+    \label{fig:s_alpha}
+\end{figure}
