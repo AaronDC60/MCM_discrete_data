@@ -1,18 +1,21 @@
 import numpy as np
 import scipy.optimize
 
-from . import utils
+from python.utils import tools
+from python.utils import spin_ops
 
-class ising_model:
+class spin_model:
 
-    def __init__(self, file):
+    def __init__(self, file, max_interaction_order):
         """
-        Initialize an Ising model object.
+        Initialize a spin model object.
 
         Parameters
         ----------
         file : str
             path to the file containing the data
+        max_interaction_order : int
+            highest order of spin operators that will be included in the model (2 for ising model)
         """
         # Load in the data
         data = np.loadtxt(file, dtype=str)
@@ -24,7 +27,7 @@ class ising_model:
         # List containing the model distribution
         self.model_distr = np.zeros(2**self.n_var)
         # Generate all pairwise operators in integer representation
-        self.spin_op = utils.generate_ops_upto_order_n(self.n_var, 2)
+        self.spin_op = spin_ops.generate_ops_upto_order_n(self.n_var, max_interaction_order)
         # List that contains all modelparameters
         self.param = np.zeros(len(self.spin_op))
         self.set_param(np.random.rand(len(self.spin_op)))
@@ -68,7 +71,7 @@ class ising_model:
         <phi_mu> : array
             array with the empirical average for every spinoperator
         """
-        exp_data = utils.fwht(self.emp_distr)
+        exp_data = tools.fwht(self.emp_distr)
         return exp_data[self.spin_op]
 
     def calc_model_distr(self):
@@ -76,7 +79,7 @@ class ising_model:
         g = np.zeros(2**self.n_var)
         g[self.spin_op] = self.param
 
-        energy = utils.fwht(g)
+        energy = tools.fwht(g)
         model_distr = np.exp(energy)
         self.model_distr = model_distr / np.sum(model_distr)
     
@@ -89,7 +92,7 @@ class ising_model:
         <phi_mu> : array
             expected value for every spinoperator
         """
-        exp_model = utils.fwht(self.model_distr)
+        exp_model = tools.fwht(self.model_distr)
         return exp_model[self.spin_op]
 
     def calc_KL_div(self):
@@ -117,7 +120,7 @@ class ising_model:
         jacobian : array
             Jacobian given the current model parameters
         """
-        jacobian = utils.fwht(self.model_distr - self.emp_distr)
+        jacobian = tools.fwht(self.model_distr - self.emp_distr)
         return jacobian[self.spin_op]
     
     def f_x(self, param):
