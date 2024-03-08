@@ -164,38 +164,35 @@ It was previously mentioned that a spin model can be used to represent system. T
 Usually a probability distribution with an exponential form is chosen,
 
 \begin{equation}\label{eq:prob_distr}
-    p(\boldsymbol{\alpha}| \mathbf{g}, \mathcal{M}) = \frac{1}{Z(\mathbf{g}, \mathcal{M})} e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\boldsymbol{\alpha})},
+    p(\boldsymbol{\alpha}| \mathbf{g}, \mathcal{M}) = \frac{1}{Z(\mathbf{g}, \mathcal{M})} e^{\sum_{\boldsymbol{\mu} \in \mathcal{M}} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})},
 \end{equation}
 
 \noindent
 with
 
 \begin{equation}
-    Z(\mathbf{g}, \mathcal{M}) = \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n}e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\boldsymbol{\alpha})}
+    Z(\mathbf{g}, \mathcal{M}) = \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n}e^{\sum_{\boldsymbol{\mu} \in \mathcal{M}} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})}
 \end{equation}
 
 \noindent
-The model $\mathcal{M}$ is defined as a subset of $\Omega_n \setminus \{ \phi^0 \}$ and $g_\mu$ a parameter that indicates the strength of the interaction between the spin variables in $\mu$.
-If a subset of spin variables is correlated, then we would expect specific patterns in the corresponding subset of the spin configuration to occur often in the data.
-For example, many observations with values +1,-1 and -1,+1 for two spins that are negatively correlated. 
-Then, the model to describes this system would have to contain the spin operator that corresponds to this subset with a large positive parameter to result in an increased probability of configurations with those patterns.
+because this is the distribution that maximizes the entropy under the constraint that the expected value for every spin operator in the model is equal to their value in the observed data, which is shown in Appendix \ref{sec:max_entropy}.
+Note that this distribution is similar to the Boltzmann distribution, which is used in statistical mechanics to describe a system at thermal equilibrium.
+
+The model $\mathcal{M}$ is defined as a subset of $\Omega_n \setminus \{ \phi^0 \}$ and $g_{\boldsymbol{\mu}} \in {\mathbb{C}}$ is a model parameter. 
+The magnitude of the parameter indicates the strength of the interaction between the spin variables in $\boldsymbol{\mu}$ and the direction of $g_{\boldsymbol{\mu}}$ tells us for which $\boldsymbol{\alpha}$ the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $p(\boldsymbol{\alpha})$ is maximized.
 
 \noindent
-The probability distribution in Equation \ref{eq:prob_distr} is similar to the Boltzmann distribution, which is used in statistical mechanics to describe a system at thermal equilibrium.
-The derivation in Appendix \ref{sec:max_entropy} shows that this distribution can also be seen as the distribution that maximizes the entropy under the constraint that the expected value for every spin operator in the model is equal to their value in the observed data.
-
-\noindent
-If we set $g_\mu = 0 \quad \forall \mu \notin \mathcal{M}$ and $g_0 = -\log Z(\mathbf{g}, \mathcal{M})$, we can write the probability distribution as
+If we set $g_{\boldsymbol{\mu}} = 0 \quad \forall \boldsymbol{\mu} \notin \mathcal{M}$ and $g_0 = -\log Z(\mathbf{g}, \mathcal{M})$, we can write the probability distribution as
 
 \begin{equation}
-    p(\boldsymbol{\alpha}) =e^{S(\boldsymbol{\alpha})}
+    p(\boldsymbol{\alpha}) =e^{S(\boldsymbol{\alpha})}\label{eq:p_alpha_s_alpha}
 \end{equation}
 
 \noindent
 with
 
 \begin{align}
-    S(\boldsymbol{\alpha}) &= \sum_{\mu \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_\mu \phi^\mu(\boldsymbol{\alpha}),\notag \\
+    S(\boldsymbol{\alpha}) &= \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}),\notag \\
     &= \bigotimes_{i = 1}^{n} \mathbf{S}^{(q)} \cdot \mathbf{g}.\label{eq:s_alpha}
 \end{align}
 
@@ -207,6 +204,7 @@ In order to guarantee $S(\boldsymbol{\alpha})$ being real, the following constra
 \begin{equation}
     g_{-\boldsymbol{\mu}} = g_{\boldsymbol{\mu}}^*.
 \end{equation}
+
 
 \noindent
 We can also split the model parameter into a real and imaginary part,
@@ -227,1752 +225,153 @@ in which case the constraint becomes
 \end{equation}
 
 \noindent
-An alternative is to write the model parameters in polar coordinates,
+Using these constraints, we can rewrite the function $S(\boldsymbol{\alpha})$,
+
+\begin{align*}
+    S(\boldsymbol{\alpha}) =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}),\\
+    =& \frac{1}{2} \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) + g_{-\boldsymbol{\mu}} \phi^{-\boldsymbol{\mu}}(\boldsymbol{\alpha}),\\
+    =& \frac{1}{2} \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} (a_{\boldsymbol{\mu}} + i b_{\boldsymbol{\mu}}) \left[ \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) + i \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right)\right] \\
+    &+ (a_{\boldsymbol{\mu}} - i b_{\boldsymbol{\mu}}) \left[ \cos \left( -\frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) + i \sin \left( -\frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right)\right],\\
+    =&  \frac{1}{2} \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} a_{\boldsymbol{\mu}} \left[ \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) + i \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) + \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - i \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) \right]\\
+    &+ b_{\boldsymbol{\mu}} \left[ i \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) - i \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) \right], \\
+    =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} a_{\boldsymbol{\mu}} \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - b_{\boldsymbol{\mu}} \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right).
+\end{align*}
+
+\noindent
+Representing complex numbers as vectors, $z = \begin{bmatrix} \Re(z) & \Im(z) \end{bmatrix}^\intercal$, allows us to write
 
 \begin{equation}
-    g_{\boldsymbol{\mu}} = r_{\boldsymbol{\mu}} e^{i \theta_{\boldsymbol{\mu}}}.
+    g_{\boldsymbol{\mu}} = \begin{bmatrix} a & b \end{bmatrix}^\intercal,
+\end{equation}
+
+\begin{equation}
+    \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) = \begin{bmatrix} \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) & \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) \end{bmatrix}^\intercal.
 \end{equation}
 
 \noindent
-Then, the constraints are
+Now, we can recognize that the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $S(\boldsymbol{\alpha})$ is the inner product of $g_{\boldsymbol{\mu}}$ with $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
+
+\begin{align}
+    S(\boldsymbol{\alpha}) =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \begin{bmatrix}
+        a & -b
+    \end{bmatrix}\begin{bmatrix}
+        \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) \\ \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right)
+    \end{bmatrix}, \notag \\
+    =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \begin{bmatrix}
+        a & b
+    \end{bmatrix}^*\begin{bmatrix}
+        \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) \\ \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right)
+    \end{bmatrix}, \notag \\
+    =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \langle g_{\boldsymbol{\mu}}, \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) \rangle.
+\end{align}
+
+\noindent
+As shown in Figure \ref{fig:S_a}, this inner product can geometrically be seen as the projection of $g_{\boldsymbol{\mu}}^*$ onto $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
+The value of this inner product is
 
 \begin{equation}
-    \begin{cases}
-        r_{-\boldsymbol{\mu}} = r_{\boldsymbol{\mu}}\\
-        \theta_{-\boldsymbol{\mu}} = -\theta_{\boldsymbol{\mu}}
-    \end{cases}
-    .
-\end{equation}
-
-
-\subsubsection{Example: 3-state,1-spin system}
-
-In case of a 3-state system with 1 spin, there are three possible states and three spin operators.
-The spin operator matrix, defined in Equation \ref{eq:spin_op_matrix}, for this system is 
-
-\begin{equation}
-    \mathbf{S}^{(3)} = \begin{bmatrix}
-        \phi^0(\alpha=0) & \phi^1(\alpha=0) & \phi^2(\alpha=0)\\
-        \phi^0(\alpha=1) & \phi^1(\alpha=1) & \phi^2(\alpha=1)\\
-        \phi^0(\alpha=2) & \phi^1(\alpha=2) & \phi^2(\alpha=2)\\
-    \end{bmatrix} = \begin{bmatrix}
-        1 & 1 & 1\\
-        1 & e^{\frac{2\pi i}{3}} & e^{\frac{4\pi i}{3}}\\
-        1 & e^{\frac{4\pi i}{3}} & e^{\frac{2\pi i}{3}}
-    \end{bmatrix}.
+    \langle g_{\boldsymbol{\mu}}, \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) \rangle = |g_{\boldsymbol{\mu}}| \cos \theta,
 \end{equation}
 
 \noindent
-Using Equation \ref{eq:s_alpha}, we can express the function, $S(\alpha)$ for all three states,
-
-\begin{align*}
-    S(\alpha=0) &= g_1 \phi^1(\alpha=0) + g_2 \phi^2(\alpha=0),\\
-    S(\alpha=1) &= g_1 \phi^1(\alpha=1) + g_2 \phi^2(\alpha=1),\\
-    S(\alpha=2) &= g_1 \phi^1(\alpha=2) + g_2 \phi^2(\alpha=2).
-\end{align*}
-
-\noindent
-Plugging in the values for the spin operators gives,
-
-\begin{align*}
-    S(\alpha=0) &= g_1 + g_2,\\
-    &= a_1 + i b_1 + a_2 + i b_2,\\
-    S(\alpha=1) &= g_1 e^{\frac{2\pi i}{3}} + g_2 e^{\frac{4\pi i}{3}},\\
-    &= (a_1 + i b_1) \left[ \cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right)\right] + (a_2 + i b_2) \left[ \cos\left(\frac{4\pi}{3}\right) + i \sin\left(\frac{4\pi}{3}\right)\right],\\
-    S(\alpha=2) &= g_1 e^{\frac{4\pi i}{3}} + g_2 e^{\frac{2\pi i}{3}},\\
-    &= (a_1 + i b_1) \left[ \cos\left(\frac{4\pi}{3}\right) + i \sin\left(\frac{4\pi}{3}\right)\right] + (a_2 + i b_2) \left[ \cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right)\right].
-\end{align*}
-
-\noindent
-Then, we can split the real and imaginary part in the exponent and use the constraints on the model parameters.
-
-{\footnotesize
-\begin{align*}
-    S(\alpha=0) &= a_1 + i b_1 + a_1 - i b_1,\\
-    &= 2 a_1,\\
-    S(\alpha=1) &= (a_1 + i b_1) \left[ \cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right)\right] + (a_1 - i b_1) \left[ \cos\left(\frac{4\pi}{3}\right) + i \sin\left(\frac{4\pi}{3}\right)\right],\\
-    &= a_1 \left[\cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right) + \cos\left(\frac{4\pi}{3}\right) + i \sin\left(\frac{4\pi}{3}\right)\right] + b_1 \left[ i \cos\left(\frac{2\pi}{3}\right) - \sin\left(\frac{2\pi}{3}\right) - i \cos\left(\frac{4\pi}{3}\right) + \sin\left(\frac{4\pi}{3}\right) \right], \\
-    &= 2 a_1 \cos\left(\frac{2\pi}{3}\right) - 2b_1 \sin\left(\frac{2\pi}{3}\right), \\
-    S(\alpha=2) &= (a_1 + i b_1) \left[ \cos\left(\frac{4\pi}{3}\right) + i \sin\left(\frac{4\pi}{3}\right)\right] + (a_1 - i b_1) \left[ \cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right)\right],\\
-    &= a_1 \left[\cos\left(\frac{4\pi}{3}\right) + i \sin\left(\frac{4\pi}{3}\right) + \cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right)\right] + b_1 \left[ i \cos\left(\frac{4\pi}{3}\right) - \sin\left(\frac{4\pi}{3}\right) - i \cos\left(\frac{2\pi}{3}\right) + \sin\left(\frac{2\pi}{3}\right) \right], \\
-    &= 2a_1 \cos\left(\frac{4\pi}{3}\right) - 2b_1 \sin\left(\frac{4\pi}{3}\right), \\
-\end{align*}
-}
-
-\noindent
-Using the approach of writing the model parameters in polar coordinates, the function, $S(\alpha)$ of all three states can be expressed as
-
-\begin{align*}
-    S(\alpha=0) &= r_1 e^{i \theta_1} \phi^1(\alpha=0) + r_2 e^{i \theta_2} \phi^2(\alpha=0),\\
-    S(\alpha=1) &= r_1 e^{i \theta_1} \phi^1(\alpha=1) + r_2 e^{i \theta_2} \phi^2(\alpha=1),\\
-    S(\alpha=2) &= r_1 e^{i \theta_1} \phi^1(\alpha=2) + r_2 e^{i \theta_2} \phi^2(\alpha=2).
-\end{align*}
-
-\noindent
-Plugging in the values for the spin operators and using the constraints gives,
-
-\begin{align*}
-    S(\alpha=0) &= r_1 e^{i \theta_1} + r_2 e^{i \theta_2},\\
-    &= r_1 e^{i \theta_1} + r_1 e^{-i \theta_1}, \\
-    &= r_1 \left[ \cos\left( \theta_1 \right) + i \sin\left( \theta_1 \right) + \cos\left( \theta_1 \right) - i \sin\left( \theta_1 \right) \right],\\
-    &= 2r_1 \cos\left( \theta_1 \right),\\
-    S(\alpha=1) &= r_1 e^{i \theta_1} e^{\frac{2\pi i}{3}} + r_2 e^{i \theta_2} e^{\frac{4\pi i}{3}},\\
-    &= r_1 e^{i\left( \frac{2\pi}{3} + \theta_1 \right)} + r_2 e^{-i \left(\frac{2\pi}{3} - \theta_2 \right)},\\
-    &= r_1 e^{i\left( \frac{2\pi}{3} + \theta_1 \right)} + r_1 e^{-i \left(\frac{2\pi}{3} + \theta_1 \right)},\\
-    &= r_1 \left[ \cos\left( \frac{2\pi}{3} + \theta_1 \right) + i \sin \left( \frac{2\pi}{3} + \theta_1 \right) + \cos\left( \frac{2\pi}{3} + \theta_1 \right) - i \sin \left( \frac{2\pi}{3} + \theta_1 \right) \right],\\
-    &= 2 r_1 \cos\left( \frac{2\pi}{3} + \theta_1 \right),\\
-    S(\alpha=2) &= r_1 e^{i \theta_1} e^{\frac{4\pi i}{3}} + r_2 e^{i \theta_2} e^{\frac{2\pi i}{3}},\\
-    &= r_1 e^{i\left( \frac{4\pi}{3} + \theta_1 \right)} + r_2 e^{-i \left(\frac{4\pi}{3} - \theta_2 \right)},\\
-    &= r_1 e^{i\left( \frac{4\pi}{3} + \theta_1 \right)} + r_1 e^{-i \left(\frac{4\pi}{3} + \theta_1 \right)},\\
-    &= r_1 \left[ \cos\left( \frac{4\pi}{3} + \theta_1 \right) + i \sin \left( \frac{4\pi}{3} + \theta_1 \right) + \cos\left( \frac{4\pi}{3} + \theta_1 \right) - i \sin \left( \frac{4\pi}{3} + \theta_1 \right) \right],\\
-    &= 2 r_1 \cos\left( \frac{4\pi}{3} + \theta_1 \right).
-\end{align*}
-
-\noindent 
-From these expressions, we can see that $S(\alpha=0)$ is maximized when $\theta_1$ is a multiple of $2\pi$. $S(\alpha=1)$ is maximized when $\frac{2\pi}{3} + \theta_1$ is a multiple of $2\pi$ or equivalent when $\theta_1$ is equal to $-\frac{2\pi}{3}$.
-$S(\alpha=2)$ is maximized when $\frac{4\pi}{3} + \theta_1$ is a multiple of $2\pi$ or equivalent when $\theta_1$ is equal to $\frac{-4\pi}{3}$.
-In general, $S(\alpha)$ and thus the probability of state $\alpha$ is maximally increased by a pair of conjugate spin operators when the complex conjugate of the parameters are aligned with the spin operators applied on the state $\alpha$.
-
-\noindent
-In Figure \ref{fig:s_alpha}, a graphical representation of $S({\alpha})$ is shown for a 3-state,1-spin system where the complex conjugate of $g_1$ aligns mostly with $\phi^1(\alpha=1)$.
-Due to the constraints on the parameters, the complex conjugate of $g_2$ aligns mostly with $\phi^2(\alpha=1)$.
-Figure \ref{fig:s_alpha_1} shows that this alignment results in a large positive real contribution to $S(\alpha = 1)$ of both $g_1 \phi^1(\alpha=1)$ and $g_2 \phi^2(\alpha=1)$. 
-Note that the complex contributions of $g_1 \phi^1(\alpha=1)$ and $g_2 \phi^2(\alpha=1)$ cancel each other, which makes $S(\alpha=1)$ a real value.
-In Figure \ref{fig:s_alpha_2}, the same thing is shown for $S(\alpha=2)$. Because the action of the spin operator on the state is different, both spin operators will have a negative real contribution to $S(\alpha=2)$.
-Again, the complex contributions cancel each other due to the constraints on the model parameters.
+where $\theta$ is the angle between $g_{\boldsymbol{\mu}}^*$ and $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
+This means that for a given magnitude of the model parameter, the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $S(\boldsymbol{\alpha})$ is maximized if $g_{\boldsymbol{\mu}}^*$ and $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ are exactly aligned.
+Note that due to the constraints, the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ is the same as the contribution of $\phi^{-\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
+Therefore, only one of the contributions will be drawn in future examples.
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.5\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            %Origin
-            \coordinate (O) at (0,0);
-            %Coordinate (1,0)
-            \coordinate (X) at (1,0);
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-    
-            %line for alpha = one state
-            \draw[blue] (0cm,0cm) -- (120:1cm);
-            % text at the end
-            \draw (120:1.18cm) node[fill=white] {$\phi^1$};
-            %draw angle
-            \coordinate (phi1) at (120:1cm);
-            \draw pic[->,"\footnotesize $\frac{2\pi}{3}$",draw=black,angle radius=30,angle eccentricity=1.25] {angle=X--O--phi1};
-    
-            %line for alpha = two state
-            \draw[red] (0cm,0cm) -- (240:1cm);
-            % text at the end
-            \draw (240:1.18cm) node[fill=white] {$\phi^2$};
-    
-            %g1
-            \draw[dashed, blue] (0cm,0cm) -- (260:1cm);
-            % text at the end
-            \draw (260:1.15cm) node[fill=white] {$g_1$};
-            % draw angle
-            \coordinate (G1) at (260:1cm);
-            \draw pic[->,"\footnotesize $\theta_1$",draw=black,angle radius=20,angle eccentricity=1.3] {angle=X--O--G1};
-    
-            %g2
-            \draw[dashed, red] (0cm,0cm) -- (100:1cm);
-            % text at the end
-            \draw (100:1.15cm) node[fill=white] {$g_2$};
-    
-            %g1 phi1
-            \draw[dashdotted, blue] (0cm,0cm) -- (20:1cm);
-            % dot at end point
-            \filldraw[blue] (20:1cm) circle(0.6pt);
-            % text at the end
-            \draw (20:1.22cm) node[fill=white] {$g_1 \phi^1$};
-            %draw angle
-            \coordinate (G1_PHI1) at (20:1cm);
-            \draw pic[->,"\footnotesize $\frac{2\pi}{3} +\theta_1$",draw=black,angle radius=40,angle eccentricity=1.5] {angle=X--O--G1_PHI1};
-    
-            %g2 phi2
-            \draw[dashdotted, red] (0cm,0cm) -- (340:1cm);
-            % dot at end point
-            \filldraw[red] (340:1cm) circle(0.6pt);
-            % text at the end
-            \draw (340:1.22cm) node[fill=white] {$g_2 \phi^2$};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {$\Re$}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\alpha = 1)$}\label{fig:s_alpha_1}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.5\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
+    \begin{tikzpicture}[scale=4,cap=round,>=latex]
+        % draw the coordinates
+        \draw[] (-1.3cm,0cm) -- (1.3cm,0cm) node[right,fill=white] {};
+        \draw[] (0cm,-1.3cm) -- (0cm,1.3cm) node[above,fill=white] {};
 
-            %line for alpha = one state
-            \draw[blue] (0cm,0cm) -- (240:1cm);
-            % text at the end
-            \draw (240:1.18cm) node[fill=white] {$\phi^1$};
-    
-            %line for alpha = two state
-            \draw[red] (0cm,0cm) -- (120:1cm);
-            % text at the end
-            \draw (120:1.18cm) node[fill=white] {$\phi^2$};
-    
-            %g1
-            \draw[dashed, blue] (0cm,0cm) -- (260:1cm);
-            % text at the end
-            \draw (260:1.15cm) node[fill=white] {$g_1$};
-    
-            %g2
-            \draw[dashed, red] (0cm,0cm) -- (100:1cm);
-            % text at the end
-            \draw (100:1.15cm) node[fill=white] {$g_2$};
-    
-            %g1 phi1
-            \draw[dashdotted, blue] (0cm,0cm) -- (140:1cm);
-            % dot at end point
-            \filldraw[blue] (140:1cm) circle(0.6pt);
-            % text at the end
-            \draw (140:1.22cm) node[fill=white] {$g_1 \phi^1$};
-    
-            %g2 phi2
-            \draw[dashdotted, red] (0cm,0cm) -- (220:1cm);
-            % dot at end point
-            \filldraw[red] (220:1cm) circle(0.6pt);
-            % text at the end
-            \draw (220:1.22cm) node[fill=white] {$g_2 \phi^2$};
+        % draw the unit circle
+        \draw[thick] (0cm,0cm) circle(1cm);
 
+        %coordinates for angle
+        \coordinate (O) at (0,0);
+        \coordinate (G) at (200:1cm);
+        \coordinate (P) at (240:1cm);
+
+        %phi_mu
+        \draw[blue, ->, very thick] (0cm,0cm) -- (120:1cm);
+        \draw (120:1.2cm) node[fill=white] {$\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$};
     
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {$\Re$}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\alpha = 2)$}\label{fig:s_alpha_2}
-    \end{subfigure}
-    \caption{Graphical representation of $S({\alpha})$ of a 3-state,1-spin system. The parameters $g_1$ and $g_2$ are chosen such that $g_1$ slightly deviates from the complex conjugate of $\phi^1(\alpha=1)$. The dots indicate the contributions to $S(\alpha)$.}
-    \label{fig:s_alpha}
+        %phi_-mu
+        \draw[blue, ->, very thick] (0cm,0cm) -- (240:1cm);
+        \draw (240:1.2cm) node[fill=white] {$\phi^{-\boldsymbol{\mu}}(\boldsymbol{\alpha})$};
+
+        %g1
+        %\draw[red, ->, very thick, dashed] (0cm,0cm) -- (260:1cm);
+        %\draw (260:1.2cm) node[fill=white] {$g_\mu$};
+
+        %g_mu*
+        \draw[red, ->, very thick] (0cm,0cm) -- (160:1cm);
+        \draw (160:1.15cm) node[fill=white] {$g_{\boldsymbol{\mu}}^*$};
+
+        %g_-mu*
+        \draw[red, ->, very thick] (0cm,0cm) -- (200:1cm);
+        \draw (200:1.15cm) node[fill=white] {$g_{-\boldsymbol{\mu}}^*$};
+
+        %a1
+        %\draw[dashed] (100:1cm) -- (260:1cm);
+        \draw[dashed] (160:1cm) -- (200:1cm);
+        \draw [decorate,decoration={brace,amplitude=5pt,raise=0.1ex}]
+        (0,0) -- (-0.939692,0) node[midway,yshift=-1em]{$a$};
+
+        %b1
+        %\draw[dashed] (260:1cm) -- (270: .9848cm);
+        %\draw [decorate,decoration={brace,amplitude=5pt,raise=0.7ex}]
+        %(0,0) -- (0,-.9848) node[midway,xshift=.4cm]{$b$};
+
+        %b1 tilde
+        \draw[dashed] (160:1cm) -- (90: .3420cm);
+        \draw [decorate,decoration={brace,amplitude=5pt, mirror,raise=0.7ex}]
+        (0,0) -- (0,.3420) node[midway,xshift=.6cm]{$-b$};
+
+        %projection
+        \draw[dashdotted] (160:1cm) -- (120:.7660cm);
+        \filldraw[black] (120:.7660cm) circle(0.6pt);
+        %\draw [decorate,decoration={brace,amplitude=5pt, mirror,raise=1ex}]
+        %(0,0) -- (120:.7660) node[midway,xshift=1.3cm, yshift=0.6cm]{$|g_{\boldsymbol{\mu}}^*| \cos \theta$};
+
+        \draw[dashdotted] (200:1cm) -- (240:.7660cm);
+        \filldraw[black] (240:.7660cm) circle(0.6pt);
+        \draw pic[-,"\small $\theta$",draw=black,angle radius=30,angle eccentricity=1.3] {angle=G--O--P};
+        \draw [decorate,decoration={brace,amplitude=5pt,raise=0.6ex}]
+        (0,0) -- (240:.7660) node[midway,xshift=.85cm, yshift=-.5cm]{$|g_{\boldsymbol{\mu}}^*| \cos \theta$};
+
+
+        % draw the horizontal and vertical coordinates
+        \draw (1.3cm,0cm)  node[above=1pt] {$\Re$}
+            (0cm,1.3cm)  node[fill=white] {$\Im$};
+    \end{tikzpicture}
+    \caption{Contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $S(\boldsymbol{\alpha})$ drawn as an inner product.}
+    \label{fig:S_a}
 \end{figure}
 
+\subsubsection{Parameter inference}
+
+For a complete model, there exists a bijective relation between $p(\boldsymbol{\alpha})$ and the model parameters, which allows us to construct an expression for the model parameters in terms of $p(\boldsymbol{\alpha})$.
+Starting from Equation \ref{eq:p_alpha_s_alpha} we can write
+
+\begin{align*}
+    \log p(\boldsymbol{\alpha}) &= S(\boldsymbol{\alpha}),\\
+    &= \sum_{\boldsymbol{\nu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\nu}} \phi^{\boldsymbol{\nu}}(\boldsymbol{\alpha}),
+\end{align*}
 
 \noindent
-\textit{Case 1: align all model parameters with the complex conjugate of the corresponding spin operators all acting on one specific state ($\alpha = 2$)}
+Multiplying both sides by $\left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^*$ and summing over all possible states $\boldsymbol{\alpha}$ gives 
 
-\begin{itemize}
-    \item $g_1$ = $r\left[\cos\left( \frac{2\pi}{3}\right) + i \sin\left( \frac{2\pi}{3}\right)\right]$
-    \item $g_2$ = $r\left[\cos\left( \frac{2\pi}{3}\right) - i \sin\left( \frac{2\pi}{3}\right)\right]$
-\end{itemize}
-
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-    
-            % text at the end
-            \draw (0:1.22cm) node[fill=white] {\begin{tabular}{c} $\phi^1$\\ $\phi^2$\\\end{tabular}};
-    
-            %line for alpha = one state
-            \draw[blue] (0cm,0cm) -- (0:1cm);
-    
-            %line for alpha = two state
-            \draw[red] (0cm,0cm) -- (0:1cm);
-
-            %g1
-            \draw[dashed, blue] (0cm,0cm) -- (120:1cm);    
-            %g2
-            \draw[dashed, red] (0cm,0cm) -- (240:1cm);
-
-            %g1 phi1
-            \draw[dashdotted, blue] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[blue] (120:1cm) circle(0.6pt);
-            % text at the end
-            \draw (120:1.3cm) node[fill=white] {\begin{tabular}{c} $g_1$\\$g_1 \phi^1$\end{tabular}};
-    
-            %g2 phi2
-            \draw[dashdotted, red] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[red] (240:1cm) circle(0.6pt);
-            % text at the end
-            \draw (240:1.3cm) node[fill=white] {\begin{tabular}{c}$g_2$\\$g_2 \phi^2$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {$\Re$}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\alpha = 0)$}\label{fig:case_1_s_alpha_0}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-    
-            %line for alpha = one state
-            \draw[blue] (0cm,0cm) -- (120:1cm);
-    
-            %line for alpha = two state
-            \draw[red] (0cm,0cm) -- (240:1cm);
-
-            %g1
-            \draw[dashed, blue] (0cm,0cm) -- (120:1cm);
-            %g2
-            \draw[dashed, red] (0cm,0cm) -- (240:1cm);
-    
-            %g1 phi1
-            \draw[dashdotted, blue] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[blue] (240:1cm) circle(0.6pt);
-            % text at the end
-            \draw (240:1.4cm) node[fill=white] {\begin{tabular}{c}$g_2$\\$\phi^2$\\$g_1 \phi^1$ \end{tabular}};
-    
-            %g2 phi2
-            \draw[dashdotted, red] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[red] (120:1cm) circle(0.6pt);
-            % text at the end
-            \draw (120:1.4cm) node[fill=white] {\begin{tabular}{c}$g_1$\\$\phi^1$\\$g_2 \phi^2$ \end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {$\Re$}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\alpha = 1)$}\label{fig:case_1_s_alpha_1}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            % text at the end
-            \draw (0:1.25cm) node[fill=white] {\begin{tabular}{c}$g_1 \phi^1$\\$g_2 \phi^2$ \end{tabular}};
-
-            %line for alpha = one state
-            \draw[blue] (0cm,0cm) -- (240:1cm);
-            % text at the end
-            \draw (240:1.3cm) node[fill=white] {\begin{tabular}{c}$g_2$\\$\phi^1$\end{tabular}};
-    
-            %line for alpha = two state
-            \draw[red] (0cm,0cm) -- (120:1cm);
-            % text at the end
-            \draw (120:1.3cm) node[fill=white] {\begin{tabular}{c}$g_1$\\$\phi^2$\end{tabular}};
-    
-            %g1
-            \draw[dashed, blue] (0cm,0cm) -- (120:1cm);
-            %g2
-            \draw[dashed, red] (0cm,0cm) -- (240:1cm);
-
-            %g1 phi1
-            \draw[dashdotted, blue] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[blue] (0:1cm) circle(0.8pt);
-    
-            %g2 phi2
-            \draw[dashdotted, red] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[red] (0:1cm) circle(0.4pt);
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {$\Re$}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\alpha = 2)$}\label{fig:case_1_s_alpha_2}
-    \end{subfigure}
-    \caption{Graphical representation of $S({\alpha})$ of a 3-state,1-spin system. The parameters $g_1$ and $g_2$ are chosen such that all of them align with the complex conjugate of corresponding spin operator acting on $\alpha=2$.}
-    \label{fig:s_alpha}
-\end{figure}
-
-\begin{table}[h]
-    \centering
-    \caption{Numerical values for S($\alpha$) and P($\alpha$).}
-    \label{tab:case_1_num_values}
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 0.5}
-        \begin{tabular}{ccc}
-            \toprule
-             $\alpha$ & S($\alpha$) & P($\alpha$)\\
-            \midrule
-            0 & -0.5 & 0.154 \\
-            1 & -0.5 & 0.154 \\
-            2 & 1 & 0.691 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 1}
-        \begin{tabular}{ccc}
-            \toprule
-             $\alpha$ & S($\alpha$) & P($\alpha$)\\
-            \midrule
-            0 & -1 & 0.045 \\
-            1 & -1 & 0.045 \\
-            2 & 2 & 0.909 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 2}
-        \begin{tabular}{ccc}
-            \toprule
-            $\alpha$ & S($\alpha$) & P($\alpha$)\\
-            \midrule
-            0 & -2 & 0.002 \\
-            1 & -2 & 0.002 \\
-            2 & 4 & 0.995 \\
-            \bottomrule
-        \end{tabular}
-    \end{subtable}
-\end{table}
+\begin{align*}
+    \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^* \log p(\boldsymbol{\alpha}) &= \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \sum_{\boldsymbol{\nu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\nu}} \phi^{\boldsymbol{\nu}}(\boldsymbol{\alpha}) \left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^*\\
+    &= \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} + \sum_{\substack{\boldsymbol{\nu} \in {(\mathbb{Z}/q\mathbb{Z})}^n \\ \boldsymbol{\nu} \neq \boldsymbol{\mu}}} g_{\boldsymbol{\nu}} \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \phi^{\boldsymbol{\nu} - \boldsymbol{\mu}}(\boldsymbol{\alpha})
+\end{align*}
 
 \noindent
-In the graphical representation, the magnitude (r) of all interaction parameters is equal to one. Due to the alignment of the interaction parameters, there is preference for state $\alpha = 2$.
-Increasing the magnitude of the interaction parameters, increases this preference and vice versa as shown in Table \ref{tab:case_1_num_values}. 
-
-\subsubsection{Example: 3-state,2-spin system}
-
-\noindent
-\textit{Case 1: Single second-order interaction}
-
-\begin{itemize}
-    \item $g_{11}$ = $r\left[\cos\left( \frac{4\pi}{3}\right) + i \sin\left( \frac{4\pi}{3}\right)\right]$
-    \item $g_{22}$ = $r\left[\cos\left( \frac{4\pi}{3}\right) - i \sin\left( \frac{4\pi}{3}\right)\right]$
-\end{itemize}
-
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-    
-            % text at the end of 0 angle
-            \draw (0:1.22cm) node[fill=white] {\begin{tabular}{c} $\phi^{11}$\\ $\phi^{22}$ \end{tabular}};
-    
-            %phi11
-            \draw[blue] (0cm,0cm) -- (0:1cm);
-    
-            %phi22
-            \draw[red] (0cm,0cm) -- (0:1cm);
-
-            %g11
-            \draw[dashed, blue] (0cm,0cm) -- (240:1cm);
-            % text at the end
-    
-            %g22
-            \draw[dashed, red] (0cm,0cm) -- (120:1cm);
-            % text at the end
-
-            %g11 phi11
-            \draw[dashdotted, blue] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[blue] (240:1cm) circle(0.6pt);
-            % text at the end
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{11}$\\$g_{11} \phi^{11}$\end{tabular}};
-    
-            %g22 phi22
-            \draw[dashdotted, red] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[red] (120:1cm) circle(0.6pt);
-            % text at the end
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c}$g_{22}$\\$g_{22} \phi^{22}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = \{00, 12, 21\})$}\label{fig:case_1_s_alpha_00_g11}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-    
-            % text at the end of the 0 angle
-            \draw (0:1.3cm) node[fill=white] {\begin{tabular}{c} $g_{11}\phi^{11}$\\ $g_{22}\phi^{22}$ \end{tabular}};
-    
-            %phi11
-            \draw[blue] (0cm,0cm) -- (120:1cm);
-            \draw (120:1.3cm) node[fill=white] {\begin{tabular}{c} $g_{22}$\\$\phi^{11}$\end{tabular}};
-    
-            %phi22
-            \draw[red] (0cm,0cm) -- (240:1cm);
-            \draw (240:1.3cm) node[fill=white] {\begin{tabular}{c} $g_{11}$\\$\phi^{22}$\end{tabular}};
-
-            %g11
-            \draw[dashed, blue] (0cm,0cm) -- (240:1cm);
-    
-            %g22
-            \draw[dashed, red] (0cm,0cm) -- (120:1cm);
-    
-            %g11 phi11
-            \draw[dashdotted, blue] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[blue] (0:1cm) circle(0.8pt);
-    
-            %g22 phi22
-            \draw[dashdotted, red] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[red] (0:1cm) circle(0.4pt);
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = \{01, 10, 22\})$}\label{fig:case_1_s_alpha_01_g11}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            %phi11
-            \draw[blue] (0cm,0cm) -- (240:1cm);
-            % text at the end
-            \draw (240:1.4cm) node[fill=white] {\begin{tabular}{c}$g_{11}$\\$\phi^{11}$\\$g_{22}\phi^{22}$\end{tabular}};
-    
-            %phi22
-            \draw[red] (0cm,0cm) -- (120:1cm);
-            % text at the end
-            \draw (120:1.4cm) node[fill=white] {\begin{tabular}{c}$g_{22}$\\$\phi^{22}$\\$g_{11}\phi^{11}$\end{tabular}};
-    
-            %g11
-            \draw[dashed, blue] (0cm,0cm) -- (240:1cm);
-    
-            %g22
-            \draw[dashed, red] (0cm,0cm) -- (120:1cm);
-
-            %g11 phi11
-            \draw[dashdotted, blue] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[blue] (120:1cm) circle(0.6pt);
-    
-            %g22 phi22
-            \draw[dashdotted, red] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[red] (240:1cm) circle(0.6pt);
-
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = \{02, 11, 20\})$}\label{fig:case_1_s_alpha_02_g11}
-    \end{subfigure}
-    \caption{Graphical representation of $S(\boldsymbol{\alpha})$ of a 3-state,2-spin system. The parameter $g_{11}$ is chosen such that it aligns with the complex conjugate of corresponding spin operator acting on states for which $\sum_{j \in \mu} \alpha_j \mu_j =  1\mod3$.}
-    \label{fig:case_1_s_alpha_g11}
-\end{figure}
-
-\begin{table}[h]
-    \centering
-    \caption{Numerical values for S($\boldsymbol{\alpha}$) and P($\boldsymbol{\alpha}$) for a spin model with only $\phi^{11}$ and $\phi^{22}$.}
-    \label{tab:case_1_num_values_g11}
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 0.5}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -0.5 & 0.051 \\
-            01 & 1 & 0.230 \\
-            02 & -0.5 & 0.051 \\
-            10 & 1 & 0.230 \\
-            11 & -0.5 & 0.051 \\
-            12 & -0.5 & 0.051 \\
-            20 & -0.5 & 0.051 \\
-            21 & -0.5 & 0.051 \\
-            22 & 1 & 0.230 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 1}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -1 & 0.015 \\
-            01 & 2 & 0.303 \\
-            02 & -1 & 0.015 \\
-            10 & 2 & 0.303 \\
-            11 & -1 & 0.015 \\
-            12 & -1 & 0.015 \\
-            20 & -1 & 0.015 \\
-            21 & -1 & 0.015 \\
-            22 & 2 & 0.303 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 2}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -2 & 0.001 \\
-            01 & 4 & 0.332 \\
-            02 & -2 & 0.001 \\
-            10 & 4 & 0.332 \\
-            11 & -2 & 0.001 \\
-            12 & -2 & 0.001 \\
-            20 & -2 & 0.001 \\
-            21 & -2 & 0.001 \\
-            22 & 4 & 0.332 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}
-\end{table}
-
-
-\begin{itemize}
-    \item $g_{12}$ = $r\left[\cos\left( \frac{4\pi}{3}\right) + i \sin\left( \frac{4\pi}{3}\right)\right]$
-    \item $g_{21}$ = $r\left[\cos\left( \frac{4\pi}{3}\right) - i \sin\left( \frac{4\pi}{3}\right)\right]$
-\end{itemize}
-
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-    
-            % text at the end of 0 angle
-            \draw (0:1.22cm) node[fill=white] {\begin{tabular}{c} $\phi^{12}$\\ $\phi^{21}$ \end{tabular}};
-    
-            %phi12
-            \draw[blue] (0cm,0cm) -- (0:1cm);
-    
-            %phi21
-            \draw[red] (0cm,0cm) -- (0:1cm);
-
-            %g12
-            \draw[dashed, blue] (0cm,0cm) -- (240:1cm);
-            % text at the end
-    
-            %g21
-            \draw[dashed, red] (0cm,0cm) -- (120:1cm);
-            % text at the end
-
-            %g12 phi12
-            \draw[dashdotted, blue] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[blue] (240:1cm) circle(0.6pt);
-            % text at the end
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{12}$\\$g_{12} \phi^{12}$\end{tabular}};
-    
-            %g21 phi21
-            \draw[dashdotted, red] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[red] (120:1cm) circle(0.6pt);
-            % text at the end
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c}$g_{21}$\\$g_{21} \phi^{21}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = \{00, 11, 22\})$}\label{fig:case_1_s_alpha_00_g12}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %phi11
-                \draw[blue] (0cm,0cm) -- (240:1cm);
-                % text at the end
-                \draw (240:1.4cm) node[fill=white] {\begin{tabular}{c}$g_{12}$\\$\phi^{12}$\\$g_{21}\phi^{21}$\end{tabular}};
-        
-                %phi22
-                \draw[red] (0cm,0cm) -- (120:1cm);
-                % text at the end
-                \draw (120:1.4cm) node[fill=white] {\begin{tabular}{c}$g_{21}$\\$\phi^{21}$\\$g_{12}\phi^{12}$\end{tabular}};
-        
-                %g11
-                \draw[dashed, blue] (0cm,0cm) -- (240:1cm);
-        
-                %g22
-                \draw[dashed, red] (0cm,0cm) -- (120:1cm);
-    
-                %g11 phi11
-                \draw[dashdotted, blue] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[blue] (120:1cm) circle(0.6pt);
-        
-                %g22 phi22
-                \draw[dashdotted, red] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[red] (240:1cm) circle(0.6pt);
-    
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = \{01, 12, 20\})$}\label{fig:case_1_s_alpha_01_g12}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-        
-                % text at the end of the 0 angle
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c} $g_{12}\phi^{12}$\\ $g_{21}\phi^{21}$ \end{tabular}};
-        
-                %phi11
-                \draw[blue] (0cm,0cm) -- (120:1cm);
-                \draw (120:1.3cm) node[fill=white] {\begin{tabular}{c} $g_{21}$\\$\phi^{12}$\end{tabular}};
-        
-                %phi22
-                \draw[red] (0cm,0cm) -- (240:1cm);
-                \draw (240:1.3cm) node[fill=white] {\begin{tabular}{c} $g_{12}$\\$\phi^{21}$\end{tabular}};
-    
-                %g11
-                \draw[dashed, blue] (0cm,0cm) -- (240:1cm);
-        
-                %g22
-                \draw[dashed, red] (0cm,0cm) -- (120:1cm);
-        
-                %g11 phi11
-                \draw[dashdotted, blue] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[blue] (0:1cm) circle(0.8pt);
-        
-                %g22 phi22
-                \draw[dashdotted, red] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[red] (0:1cm) circle(0.4pt);
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.5cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = \{02, 10, 21\})$}\label{fig:case_1_s_alpha_02_g12}
-    \end{subfigure}
-    \caption{Graphical representation of $S({\boldsymbol{\alpha}})$ of a 3-state,2-spin system. The parameter $g_{12}$ is chosen such that it aligns with the complex conjugate of corresponding spin operator acting on states for which $\sum_{j \in \mu} \alpha_j \mu_j =  1\mod3$.}
-    \label{fig:s_case_1_alpha_g12}
-\end{figure}
-
-\begin{table}[h]
-    \centering
-    \caption{Numerical values for S($\boldsymbol{\alpha}$) and P($\boldsymbol{\alpha}$) for a spin model with only $\phi^{12}$ and $\phi^{21}$.}
-    \label{tab:case_1_num_values_g11}
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 0.5}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -0.5 & 0.051 \\
-            01 & -0.5 & 0.051 \\
-            02 & 1 & 0.230 \\
-            10 & 1 & 0.230 \\
-            11 & -0.5 & 0.051 \\
-            12 & -0.5 & 0.051 \\
-            20 & -0.5 & 0.051 \\
-            21 & 1 & 0.230 \\
-            22 & -0.5 & 0.051\\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 1}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -1 & 0.015 \\
-            01 & -1 & 0.015 \\
-            02 & 2 & 0.303 \\
-            10 & 2 & 0.303 \\
-            11 & -1 & 0.015 \\
-            12 & -1 & 0.015 \\
-            20 & -1 & 0.015 \\
-            21 & 2 & 0.303 \\
-            22 & -1 & 0.015 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 2}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -2 & 0.001 \\
-            01 & -2 & 0.001 \\
-            02 & 4 & 0.332 \\
-            10 & 4 & 0.332 \\
-            11 & -2 & 0.001 \\
-            12 & -2 & 0.001 \\
-            20 & -2 & 0.001 \\
-            21 & 4 & 0.332 \\
-            22 & -2 & 0.001 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}
-\end{table}
-
-\newpage
-
-\noindent
-\textit{Case 2: Two first-order interactions}
-
-\begin{itemize}
-    \item $g_{01}$ = $r\left[\cos\left( \frac{2\pi}{3}\right) + i \sin\left( \frac{2\pi}{3}\right)\right]$
-    \item $g_{02}$ = $r\left[\cos\left( \frac{2\pi}{3}\right) - i \sin\left( \frac{2\pi}{3}\right)\right]$
-    \item $g_{10}$ = $r\left[\cos\left( \frac{4\pi}{3}\right) + i \sin\left( \frac{4\pi}{3}\right)\right]$
-    \item $g_{20}$ = $r\left[\cos\left( \frac{4\pi}{3}\right) - i \sin\left( \frac{4\pi}{3}\right)\right]$
-\end{itemize}
-
-\begin{figure}[h!]
-    \centering
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            %g01 phi01
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.8pt);
-            %g20 phi20
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.4pt);
-
-            %g02 phi02
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.8pt);
-            %g10 phi10
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.4pt);
-
-            % text at the end
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\ $g_{20} \phi^{20}$\end{tabular}};
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\ $g_{10} \phi^{10}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = 00)$}\label{fig:case_2_s_alpha_00}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.8pt);
-                %g20 phi20
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.4pt);                
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.8pt);
-                %g10 phi10
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.4pt);
-
-                % text at the end
-                \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\ $g_{20} \phi^{20}$\end{tabular}};
-                \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\ $g_{10} \phi^{10}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 01)$}\label{fig:case_2_s_alpha_01}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);
-                
-                %g20 phi20
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.6pt);               
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.4pt);
-
-                %g10 phi10
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.6pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c}$g_{01} \phi^{01}$\\ $g_{02} \phi^{02}$\end{tabular}};
-                \draw (120:1.25cm) node[fill=white] {\begin{tabular}{c} $g_{20} \phi^{20}$\end{tabular}};
-                \draw (240:1.25cm) node[fill=white] {\begin{tabular}{c} $g_{10} \phi^{10}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 02)$}\label{fig:case_2_s_alpha_02}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            %g01 phi01
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.6pt);
-            %g20 phi20
-            \draw[black] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[black] (0:1cm) circle(0.8pt);
-
-            %g02 phi02
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.6pt);
-            %g10 phi10
-            \draw[black] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[black] (0:1cm) circle(0.4pt);
-
-            % text at the end
-            \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c} $g_{10} \phi^{10}$\\ $g_{20} \phi^{20}$\end{tabular}};
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\end{tabular}};
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = 10)$}\label{fig:case_2_s_alpha_10}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.6pt);
-                %g20 phi20
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);                
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.6pt);
-                %g10 phi10
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.4pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c} $g_{10} \phi^{10}$\\ $g_{20} \phi^{20}$\end{tabular}};
-                \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\end{tabular}};
-                \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 11)$}\label{fig:case_2_s_alpha_11}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(1pt);
-                
-                %g20 phi20
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);               
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.6pt);
-
-                %g10 phi10
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.4pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c}$g_{01} \phi^{01}$\\ $g_{02} \phi^{02}$\\$g_{10} \phi^{10}$\\ $g_{20} \phi^{20}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 12)$}\label{fig:case_2_s_alpha_12}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            %g01 phi01
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.8pt);
-            %g20 phi20
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.8pt);
-
-            %g02 phi02
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.4pt);
-            %g10 phi10
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.4pt);
-
-            % text at the end
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\ $g_{10} \phi^{10}$\end{tabular}};
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\ $g_{20} \phi^{20}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = 20)$}\label{fig:case_2_s_alpha_20}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.8pt);
-                %g20 phi20
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.8pt);                
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.4pt);
-                %g10 phi10
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.4pt);
-
-                % text at the end
-                \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\ $g_{10} \phi^{10}$\end{tabular}};
-                \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\ $g_{20} \phi^{20}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 21)$}\label{fig:case_2_s_alpha_21}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);
-                
-                %g20 phi20
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.6pt);               
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.4pt);
-
-                %g10 phi10
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.6pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c}$g_{01} \phi^{01}$\\ $g_{02} \phi^{02}$\end{tabular}};
-                \draw (120:1.25cm) node[fill=white] {\begin{tabular}{c} $g_{10} \phi^{10}$\end{tabular}};
-                \draw (240:1.25cm) node[fill=white] {\begin{tabular}{c} $g_{20} \phi^{20}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 22)$}\label{fig:case_2_s_alpha_22}
-    \end{subfigure}
-    \caption{Graphical representation of $S({\boldsymbol{\alpha}})$ of a 3-state,2-spin system with two first-order interactions. The parameters are chosen such that spin one prefers to be in state $\alpha = 1$ and spin two prefers to be in state $\alpha = 2$.}
-    \label{fig:s_case_2}
-\end{figure}
-
-\begin{table}[h]
-    \centering
-    \caption{Numerical values for S($\boldsymbol{\alpha}$) and P($\boldsymbol{\alpha}$) for a spin model with two first-order interactions.}
-    \label{tab:case_2_num_values}
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 0.5}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -1 & 0.024 \\
-            01 & -1 & 0.024 \\
-            02 & 0.5 & 0.107 \\
-            10 & 0.5 & 0.107 \\
-            11 & 0.5 & 0.107 \\
-            12 & 2 & 0.478 \\
-            20 & -1 & 0.024 \\
-            21 & -1 & 0.024 \\
-            22 & 0.5 & 0.107\\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 1}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -2 & 0.002 \\
-            01 & -2 & 0.002 \\
-            02 & 1 & 0.041 \\
-            10 & 1 & 0.041 \\
-            11 & 1 & 0.041 \\
-            12 & 4 & 0.827 \\
-            20 & -2 & 0.002 \\
-            21 & -2 & 0.002 \\
-            22 & 1 & 0.041 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 2}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & -4 & 0.000 \\
-            01 & -4 & 0.000 \\
-            02 & 2 & 0.002 \\
-            10 & 2 & 0.002 \\
-            11 & 2 & 0.002 \\
-            12 & 8 & 0.990 \\
-            20 & -4 & 0.000 \\
-            21 & -4 & 0.000 \\
-            22 & 2 & 0.002 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}
-\end{table}
-
-\noindent
-\textit{Case 3: One first-order interaction and one second-order interaction}
-
-\begin{itemize}
-    \item $g_{01}$ = $r\left[\cos\left( \frac{2\pi}{3}\right) + i \sin\left( \frac{2\pi}{3}\right)\right]$
-    \item $g_{02}$ = $r\left[\cos\left( \frac{2\pi}{3}\right) - i \sin\left( \frac{2\pi}{3}\right)\right]$
-    \item $g_{12}$ = $r$
-    \item $g_{21}$ = $r$
-\end{itemize}
-
-\begin{figure}[h!]
-    \centering
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            %g01 phi01
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.6pt);
-
-            %g02 phi02
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.6pt);
-
-            %g12 phi12
-            \draw[black] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[black] (0:1cm) circle(0.8pt);
-
-            %g21 phi21
-            \draw[black] (0cm,0cm) -- (0:1cm);
-            % dot at end point
-            \filldraw[black] (0:1cm) circle(0.8pt);
-
-            % text at the end
-            \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c} $g_{12} \phi^{12}$\\ $g_{21} \phi^{21}$\end{tabular}};
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\end{tabular}};
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = 00)$}\label{fig:case_3_s_alpha_00}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.8pt);             
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.8pt);
-
-                %g12 phi12
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.8pt);
-
-                %g21 phi21
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.8pt);
-
-                % text at the end
-                \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\ $g_{21} \phi^{21}$\end{tabular}};
-                \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\ $g_{12} \phi^{12}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 01)$}\label{fig:case_3_s_alpha_01}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);           
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.4pt);
-
-                %g12 phi12
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.6pt);
-
-                %g21 phi21
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.6pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c}$g_{01} \phi^{01}$\\ $g_{02} \phi^{02}$\end{tabular}};
-                \draw (120:1.25cm) node[fill=white] {\begin{tabular}{c} $g_{12} \phi^{12}$\end{tabular}};
-                \draw (240:1.25cm) node[fill=white] {\begin{tabular}{c} $g_{21} \phi^{21}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 02)$}\label{fig:case_3_s_alpha_02}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            %g01 phi01
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.6pt);
-
-            %g02 phi02
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.6pt);
-
-            %g12 phi12
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.8pt);
-
-            %g21 phi21
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.8pt);
-
-            % text at the end
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\$g_{12} \phi^{12}$\end{tabular}};
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\$g_{21} \phi^{21}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = 10)$}\label{fig:case_3_s_alpha_10}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.6pt);             
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.6pt);
-
-                %g12 phi12
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);
-
-                %g21 phi21
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c} $g_{12} \phi^{12}$\\ $g_{21} \phi^{21}$\end{tabular}};
-                \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\end{tabular}};
-                \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 11)$}\label{fig:case_3_s_alpha_11}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);             
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);
-
-                %g12 phi12
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.6pt);
-
-                %g21 phi21
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.6pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c}$g_{01} \phi^{01}$\\ $g_{02} \phi^{02}$\end{tabular}};
-                \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{21} \phi^{21}$\end{tabular}};
-                \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{12} \phi^{12}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 12)$}\label{fig:case_3_s_alpha_12}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-            % draw the coordinates
-            \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-            \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-    
-            % draw the unit circle
-            \draw[thick] (0cm,0cm) circle(1cm);
-
-            %g01 phi01
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.8pt);
-
-            %g02 phi02
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.8pt);
-
-            %g12 phi12
-            \draw[black] (0cm,0cm) -- (240:1cm);
-            % dot at end point
-            \filldraw[black] (240:1cm) circle(0.8pt);
-
-            %g21 phi21
-            \draw[black] (0cm,0cm) -- (120:1cm);
-            % dot at end point
-            \filldraw[black] (120:1cm) circle(0.8pt);
-
-            % text at the end
-            \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\ $g_{21} \phi^{21}$\end{tabular}};
-            \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\ $g_{12} \phi^{12}$\end{tabular}};
-    
-            % draw the horizontal and vertical coordinates
-            \draw (1.4cm,0cm)  node[above=1pt] {}
-                (0cm,1.4cm)  node[fill=white] {$\Im$};
-        \end{tikzpicture}}
-        \caption{$S(\boldsymbol{\alpha} = 20)$}\label{fig:case_3_s_alpha_20}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.8pt);              
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.8pt);
-        
-                %g12 phi12
-                \draw[black] (0cm,0cm) -- (120:1cm);
-                % dot at end point
-                \filldraw[black] (120:1cm) circle(0.8pt);
-
-                %g21 phi21
-                \draw[black] (0cm,0cm) -- (240:1cm);
-                % dot at end point
-                \filldraw[black] (240:1cm) circle(0.8pt);
-
-                % text at the end
-                \draw (120:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{02} \phi^{02}$\\ $g_{12} \phi^{12}$\end{tabular}};
-                \draw (240:1.32cm) node[fill=white] {\begin{tabular}{c} $g_{01} \phi^{01}$\\ $g_{21} \phi^{21}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 21)$}\label{fig:case_3_s_alpha_21}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \resizebox{\textwidth}{!}{
-            \begin{tikzpicture}[scale=2.7,cap=round,>=latex]
-                % draw the coordinates
-                \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
-                \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
-        
-                % draw the unit circle
-                \draw[thick] (0cm,0cm) circle(1cm);
-    
-                %g01 phi01
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);              
-    
-                %g02 phi02
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.4pt);
-
-                %g12 phi12
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(1pt);
-    
-                %g21 phi21
-                \draw[black] (0cm,0cm) -- (0:1cm);
-                % dot at end point
-                \filldraw[black] (0:1cm) circle(0.8pt);
-
-                % text at the end
-                \draw (0:1.32cm) node[fill=white] {\hspace{-.3cm} \begin{tabular}{c}$g_{01} \phi^{01}$\\ $g_{02} \phi^{02}$\\ $g_{12} \phi^{12}$\\ $g_{21} \phi^{21}$\end{tabular}};
-        
-                % draw the horizontal and vertical coordinates
-                \draw (1.4cm,0cm)  node[above=1pt] {}
-                    (0cm,1.4cm)  node[fill=white] {$\Im$};
-            \end{tikzpicture}}
-            \caption{$S(\boldsymbol{\alpha} = 22)$}\label{fig:case_3_s_alpha_22}
-    \end{subfigure}
-    \caption{Graphical representation of $S({\boldsymbol{\alpha}})$ of a 3-state,2-spin system with a first-order interaction, $\phi^{01}$ and $\phi^{01}$, and a second order interaction, $\phi^{12}$ and $\phi^{21}$. The parameters for the first-order interaction are chosen such that states where $\alpha_2 = 2$ are preferred and the parameters of the second-order interactions such that states for which  $\sum_{j \in \mu} \alpha_j \mu_j =  0\mod3$ are preferred.}
-    \label{fig:s_case_3}
-\end{figure}
-
-\begin{table}[h]
-    \centering
-    \caption{Numerical values for S($\boldsymbol{\alpha}$) and P($\boldsymbol{\alpha}$) for a spin model with a first-order interaction, $\phi^{01}$ and $\phi^{01}$, and a second order interaction, $\phi^{12}$ and $\phi^{21}$.}
-    \label{tab:case_2_num_values}
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 0.5}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & 0.5 & 0.107 \\
-            01 & -1 & 0.024 \\
-            02 & 0.5 & 0.107 \\
-            10 & -1 & 0.024 \\
-            11 & 0.5 & 0.107 \\
-            12 & 0.5 & 0.107 \\
-            20 & -1 & 0.024 \\
-            21 & -1 & 0.024 \\
-            22 & 2 & 0.478\\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 1}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & 1 & 0.041 \\
-            01 & -2 & 0.002 \\
-            02 & 1 & 0.041 \\
-            10 & -2 & 0.002 \\
-            11 & 1 & 0.041 \\
-            12 & 1 & 0.041 \\
-            20 & -2 & 0.002 \\
-            21 & -2 & 0.002 \\
-            22 & 4 & 0.827 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{.3\textwidth}
-        \centering
-        \caption{r = 2}
-        \begin{tabular}{ccc}
-            \toprule
-             $\boldsymbol{\alpha}$ & S($\boldsymbol{\alpha}$) & P($\boldsymbol{\alpha}$)\\
-            \midrule
-            00 & 2 & 0.002 \\
-            01 & -4 & 0.000 \\
-            02 & 2 & 0.002 \\
-            10 & -4 & 0.000 \\
-            11 & 2 & 0.002 \\
-            12 & 2 & 0.002 \\
-            20 & -4 & 0.000 \\
-            21 & -4 & 0.000 \\
-            22 & 8 & 0.990 \\
-          \bottomrule
-        \end{tabular}
-    \end{subtable}
-\end{table}
+Given that the $\sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \phi^{\boldsymbol{\mu}} = 0 \quad \forall \boldsymbol{\mu} \neq \mathbf{0}$, we obtain that
+
+\begin{align*}
+    g_{\boldsymbol{\mu}} = \frac{1}{q^n}  \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^* \log p(\boldsymbol{\alpha})
+\end{align*}
