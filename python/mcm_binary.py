@@ -1,8 +1,15 @@
+"""
+Class that can be used to find the best MCM for a binary dataset
+"""
+
 import numpy as np
 import math
 import copy
 
-from . import utils
+from python.data import read_in
+from python.utils import tools
+from python.utils import spin_ops
+from python.utils import transformations
 
 class mcm:
 
@@ -17,11 +24,11 @@ class mcm:
         """
         self.file = file
         # Process data by writing observations in integer representation
-        self.data, self.n_var = utils.process_data_int(file)
+        self.data, self.n_var = read_in.process_data_int(file)
 
         # Generate all possible MCMs
         self.mcms = []
-        utils.generate_partitions(0, self.n_var, [], self.mcms)
+        tools.generate_partitions(0, self.n_var, [], self.mcms)
 
         # Storage for best results
         self.best_mcm = None
@@ -32,7 +39,7 @@ class mcm:
     
     def reset_data(self):
         """Transform data back to the original data."""
-        self.data, _ = utils.process_data_int(self.file)
+        self.data, _ = read_in.process_data_int(self.file)
     
     def transform_data(self, gt=None):
         """
@@ -54,7 +61,7 @@ class mcm:
         new_data = []
         # Transform every observation in the data
         for obs in self.data:
-            new_data.append(utils.gt_state(obs, gt))
+            new_data.append(transformations.gt_state(obs, gt))
         self.data = new_data
     
     def calc_log_evidence(self, mcm):
@@ -189,10 +196,10 @@ class mcm:
 
             if max_interactions is None:
                 # Include all operators
-                all_ops = utils.generate_all_ops(self.n_var)
+                all_ops = spin_ops.generate_all_ops(self.n_var, 2)
             else:
                 # Generate all operators upto a specific order
-                all_ops = utils.generate_ops_upto_order_n(self.n_var, max_interactions)
+                all_ops = spin_ops.generate_ops_upto_order_n(self.n_var, max_interactions)
 
             # Find the n most biased operator
             for _ in range(self.n_var):
@@ -228,7 +235,7 @@ class mcm:
             if im == [2**i for i in range(self.n_var)]:
                 break
             # Update best IM
-            self.best_im = utils.gt_model(self.best_im, im)
+            self.best_im = transformations.gt_model(self.best_im, im)
             self.transform_data(im)
         return self.best_im
     

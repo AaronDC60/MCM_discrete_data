@@ -1,8 +1,13 @@
+"""
+Class that can be used to find the best MCM for a discrete dataset
+"""
+
 import numpy as np
 import math
 import copy
 
-from . import utils
+from python.data import read_in
+from python.utils import tools
 
 class mcm:
 
@@ -17,13 +22,13 @@ class mcm:
         """
         self.file = file
         # Process data by writing observations as arrays
-        self.data, self.n_var = utils.process_data_array(file)
+        self.data, self.n_var = read_in.process_data_array(file)
         # Number of states a variable can be in
         self.q = n_states
 
         # Generate all possible MCMs
         self.mcms = []
-        utils.generate_partitions(0, self.n_var, [], self.mcms)
+        tools.generate_partitions(0, self.n_var, [], self.mcms)
 
         # Storage for best results
         self.best_mcm = None
@@ -34,7 +39,7 @@ class mcm:
 
     def reset_data(self):
         """Transform data back to the original data."""
-        self.data, _ = utils.process_data_array(self.file)
+        self.data, _ = read_in.process_data_array(self.file)
     
     def calc_log_evidence(self, mcm):
         """
