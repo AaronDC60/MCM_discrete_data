@@ -26,7 +26,7 @@
 \RequirePackage{translations}
 \RequirePackage{ifthen}
 \RequirePackage{xstring}
-\RequirePackage[a4paper, left=30mm, right=30mm, top=20mm, bottom=30mm, marginpar=25mm]{geometry}
+\RequirePackage[a4paper, left=25mm, right=25mm, top=20mm, bottom=30mm, marginpar=25mm]{geometry}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage{csquotes}
 

@@ -1,0 +1,81 @@
+\clearpage
+
+\subsubsection{Minimally Complex models}
+
+As $\Omega_n \setminus \{ \phi^0 \}$ contains $2^n-1$ operators, we can construct $2^{2^n-1}$ different spin models.
+For most systems, searching for the best model among all possible models is unfeasible.
+Therefore, the search is usually limited to of a subset of models.
+One subset that is commonly used is the set of pairwise models where only interactions upto second-order are considered.
+Another subset is the set of minimally complex models (MCMs).
+An MCM is defined as the union of independent complete components (ICCs).
+A given component, $\mathcal{M}_a$, is called complete if
+
+\begin{equation}
+    \mu \oplus \nu \in \mathcal{M}_a \: \forall \: \mu, \nu \in \mathcal{M}_a.
+\end{equation}
+
+\noindent
+A component is called independent from other components if every operator in the component can only be constructed using operators from the same component.
+
+\subsection{Bayesian model selection}
+
+In Bayesian model selection the model that best fits the data corresponds to the model with the largest posterior probability, $P(\mathcal{M} | \mathbf{\hat{s}})$, which is the probability of the model given the dataset $\mathbf{\hat{s}} = (\mathbf{s}^{(1)} \dots \mathbf{s}^{(N)})$ containing N observed configurations.
+Using Bayes' theorem, the posterior probability can be expressed in terms of the evidence, $P(\mathbf{\hat{s}}|\mathcal{M})$, which is the likelihood of the model given the observed dataset.
+
+\begin{equation}
+    P(\mathcal{M} | \mathbf{\hat{s}}) = \frac{P(\mathbf{\hat{s}}|\mathcal{M}) \: P(\mathcal{M}) }{\sum_{\mathcal{M}^\prime}P(\mathbf{\hat{s}}|\mathcal{M}^\prime) \: P(\mathcal{M}^\prime)}
+\end{equation}
+
+\noindent
+The sum in the denominator runs of all the different models that we consider and $P(\mathcal{M})$ is the prior probability of the model.
+Without a preference for any model before the observed data, we choose a uniform prior distribution.
+As a consequence, the model with the largest evidence will be the model with the largest posterior probability.
+Because the likelihood of the model depends on the chosen model parameters, $g_\mu$, we can write is as
+
+\begin{align}
+    P(\mathbf{\hat{s}}|\mathcal{M}) &= \int d\mathbf{g} P(\mathbf{\hat{s}} | \mathbf{g}, \mathcal{M}) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \prod_{i=1}^N P(\mathbf{s}^{(i)} | \mathbf{g}, \mathcal{M}) P_0(\mathbf{g}|\mathcal{M}). \notag
+\end{align}
+
+\noindent
+The probability of a single observations $\mathbf{s}^{(i)}$ for a given model and model parameters is the probability defined in Equation \ref{eq:prob_distr}, which allows us to rewrite the evidence as
+
+\begin{align*}
+    P(\mathbf{\hat{s}}|\mathcal{M}) &= \int d\mathbf{g} \prod_{i=1}^N \frac{1}{Z_\mathbf{g}(\mathcal{M})} \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s}^{(i)}) \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \prod_{i=1}^N \text{exp}\left(\sum_{\mu \in \mathcal{M}} \left[ g_\mu \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{i=1}^N \sum_{\mu \in \mathcal{M}} \left[ g_\mu \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu \sum_{i=1}^N \left[ \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
+    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu N \left[ \phi^\mu(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}),
+\end{align*}
+
+\noindent
+where $\phi^\mu(\mathbf{\hat{s}})$ is the empirical average of the operator $\phi^\mu$.
+
+\begin{equation}
+    \phi^\mu(\mathbf{\hat{s}}) = \frac{1}{N} \sum_{i=1}^N \phi^\mu(\mathbf{s}^{(i)})
+\end{equation}
+
+\noindent
+Defining $\boldsymbol{\phi}(\mathbf{\hat{s}})$ as a vector of length $|\mathcal{M}|$ with the entries of $\phi^\mu(\mathbf{\hat{s}})$ for every operator $\mu$, gives the following expression for the evidence of the model
+
+\begin{equation} \label{eq:evidence}
+    P(\mathbf{\hat{s}}|\mathcal{M}) = \int d\mathbf{g} \: \text{exp}\left( N  \left[ \mathbf{g} \cdot \boldsymbol{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}).
+\end{equation}
+
+\noindent
+In this expression we can recognize the log-likelihood of the model parameters given the observed dataset,
+
+\begin{equation} \label{eq:log_likelihood}
+    \log P(\mathbf{\hat{s}} | \mathbf{g}, \mathcal{M}) = N  \left[ \mathbf{g} \cdot \boldsymbol{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right].
+\end{equation}
+
+\noindent
+In Appendix \ref{sec:max_log_likelihood} it is shown that for the model parameters that maximize the log-likelihood the expected value for every spin operator considered in the model is equal to the empirical average of that spin operator, which are exactly the used constraints in the construction of the probability distribution that maximizes the entropy.
+
+If the number of observations is large, we can approximate the integral in Equation \ref{eq:evidence} using Laplace's method because the integral will be sharply peaked around the maximum with respect to the model parameters.
+The derivation is given in Appendix \ref{sec:laplace} and allows us to write the log-evidence as
+
+\begin{equation}
+    \log P(\mathbf{\hat{s}}|\mathcal{M}) \approx \log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) -  \frac{|\mathcal{M}|}{2} \log \frac{N}{2 \pi} - \log \left[ \frac{\sqrt{\text{det } \mathbb{J}(\mathbf{g}^\star)}}{P_0(\mathbf{g}^\star|\mathcal{M})} \right]
+\end{equation}
+

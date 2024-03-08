@@ -6,6 +6,9 @@ This section covers the theoretical concepts necessary to understand the researc
 
 One approach to represent a system is through a spin model. Assume a given system with $n$ components where a single observation of the system yields one value for every component.
 Such an observation can be seen as a specific state of the system.
+
+\subsubsection{Binary spin operators}
+
 In case that the observations can be binarized, the state of the system can be written as a spin configuration,
 
 \begin{equation}
@@ -80,100 +83,295 @@ If the two spin configurations are the same, $s_i s_i^\prime$ will always be equ
     A set of spin operators that for which the product of every subset does not yield the identity operator is called a set of independent operators.
 \end{definition}
 
+\subsubsection{Discrete spin operators}
+
+In case a system of $n$ variables where each variable can have $q$ different values, labeled from $0$ to $q-1$, a state of the system is a vector $\boldsymbol{\alpha}= (\alpha_1 \dots \alpha_n) \in {(\mathbb{Z}/q\mathbb{Z})}^n$.
+We can still see these states as spins by representing them as vectors on a unit circle with an angle of $\frac{2\pi}{q}\alpha$.
+The mapping between the value $\alpha_j$ of a variable and the spin value $s_j$ is then given by the following relation
+
+\begin{equation}
+    s_j = e^{\frac{2\pi i \alpha_j}{q}}.
+\end{equation}
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=4,cap=round,>=latex]
+        % draw the coordinates
+        \draw[dashed] (-1.5cm,0cm) -- (1.5cm,0cm) node[right,fill=white] {};
+        \draw[dashed] (0cm,-1.5cm) -- (0cm,1.5cm) node[above,fill=white] {};
+
+        % draw the unit circle
+        \draw[thick] (0cm,0cm) circle(1cm);
+
+        \foreach \x in {0,1,2} {
+            % lines from center to point
+            \draw[gray] (0cm,0cm) -- (\x*120:1cm);
+            % dots at each point
+            \filldraw[black] (\x*120:1cm) circle(0.4pt);
+            % draw each angle in degrees
+            \draw (\x*120:0.6cm) node[fill=white] {$\alpha = \x$};
+    }
+    \foreach \x/\xtext/\y in {
+        % alpha = 1
+        120/\text{cos}\left(\frac{2\pi}{3}\right)/\text{sin}\left(\frac{2\pi}{3}\right),
+        % alpha = 2
+        240/\text{cos}\left(\frac{4\pi}{3}\right)/\text{sin}\left(\frac{4\pi}{3}\right)}
+            \draw (\x:1.25cm) node[fill=white] {$\left(\xtext, \y\right)$};
+
+        % draw the horizontal and vertical coordinates
+        \draw (-1.25cm,0cm) node[above=1pt] {$(-1,0)$}
+            (1.25cm,0cm)  node[above=1pt] {$(1,0)$}
+            (0cm,-1.25cm) node[fill=white] {$(0,-i)$}
+            (0cm,1.25cm)  node[fill=white] {$(0,i)$};
+    \end{tikzpicture}
+    \caption{All states in a 3-state system drawn as the cube roots of unity.}
+    \label{fig:roots_of_unity}
+\end{figure}
+
+\noindent
+These spin values are equivalent to the q-th roots of unity, which are drawn in Figure \ref{fig:roots_of_unity} for q equal to three.
+Analogous to the binary case, we can define a spin operator,
+
+\begin{equation}
+    \phi^{\boldsymbol{\mu}}(\mathbf{s}) = \prod_{j=1}^{n} s_j^{\mu_j},
+\end{equation}
+
+\noindent
+with $\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n$. With the bijective relation between $\mathbf{s}$ and $\boldsymbol{\alpha}$ we can also write the spin operators in terms of $\boldsymbol{\alpha}$,
+
+\begin{equation}
+    \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) = e^{\frac{2\pi i}{q} \sum_{j=1}^{n}  \alpha_j \mu_j},
+\end{equation}
+
+\noindent
+In total there are $q^n$ spin operators that form a finite multiplicative group that is equal to the set of the q-th roots of unity.
+Applying a spin operator $\phi^{\boldsymbol{\mu}}$ on a state $\boldsymbol{\alpha}$ can be seen as a rotation around the unit circle starting from the zero state over an angle $\sum_{j=1}^{n}  \alpha_j \mu_j$.
+Similar as in the binary case, we can construct a $q$ x $q$ spin operator matrix.
+
+\begin{equation}
+    \mathbf{S}^{(q)} = \begin{bmatrix}
+        \phi^0(\alpha=0) & \phi^1(\alpha=0) & \hdots &  \phi^{q-1}(\alpha=0)\\
+        \phi^0(\alpha=1) & \phi^1(\alpha=1) & \hdots &  \phi^{q-1}(\alpha=1)\\
+        \vdots & \vdots & \ddots & \vdots \\
+        \phi^0(\alpha=q-1) & \phi^1(\alpha=q-1) & \hdots & \phi^{q-1}(\alpha=q-1)\\
+    \end{bmatrix}\label{eq:spin_op_matrix}
+\end{equation}
+
+\subsubsection{Probability distribution}
+
 \noindent
 It was previously mentioned that a spin model can be used to represent system. The idea is that we assume the system to be in some sort of an equilibrium and the observed spin configurations can be seen as sampled from a given probability distribution.
 Usually a probability distribution with an exponential form is chosen,
 
 \begin{equation}\label{eq:prob_distr}
-    p(\mathbf{s}| \mathbf{g}, \mathcal{M}) = \frac{1}{Z(\mathbf{g}, \mathcal{M})} e^{\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s})},
+    p(\boldsymbol{\alpha}| \mathbf{g}, \mathcal{M}) = \frac{1}{Z(\mathbf{g}, \mathcal{M})} e^{\sum_{\boldsymbol{\mu} \in \mathcal{M}} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})},
 \end{equation}
 
 \noindent
-where the model $\mathcal{M}$ is defined as a subset of $\Omega_n \setminus \{ \phi^0 \}$ and $g_\mu$ a parameter that indicates the strength of the interaction between the spin variables in $\mu$.
-If a subset of spin variables is correlated, then we would expect specific patterns in the corresponding subset of the spin configuration to occur often in the data.
-For example, many observations with values +1,-1 and -1,+1 for two spins that are negatively correlated. 
-Then, the model to describes this system would have to contain the spin operator that corresponds to this subset with a large (positive or negative) parameter to result in an increased probability of configurations with those patterns.
-
-\noindent
-The probability distribution in Equation \ref{eq:prob_distr} is similar to the Boltzmann distribution, which is used in statistical mechanics to describe a system at thermal equilibrium.
-The derivation in Appendix \ref{sec:max_entropy} shows that this distribution can also be seen as the distribution that maximizes the entropy under the constraint that the expected value for every spin operator in the model is equal to their value in the observed data.
-
-\noindent
-As $\Omega_n \setminus \{ \phi^0 \}$ contains $2^n-1$ operators, we can construct $2^{2^n-1}$ different spin models.
-For most systems, searching for the best model among all possible models is unfeasible.
-Therefore, the search is usually limited to of a subset of models.
-One subset that is commonly used is the set of pairwise models where only interactions upto second-order are considered.
-Another subset is the set of minimally complex models (MCMs).
-An MCM is defined as the union of independent complete components (ICCs).
-A given component, $\mathcal{M}_a$, is called complete if
+with
 
 \begin{equation}
-    \mu \oplus \nu \in \mathcal{M}_a \: \forall \: \mu, \nu \in \mathcal{M}_a.
+    Z(\mathbf{g}, \mathcal{M}) = \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n}e^{\sum_{\boldsymbol{\mu} \in \mathcal{M}} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})}
 \end{equation}
 
 \noindent
-A component is called independent from other components if every operator in the component can only be constructed using operators from the same component.
+because this is the distribution that maximizes the entropy under the constraint that the expected value for every spin operator in the model is equal to their value in the observed data, which is shown in Appendix \ref{sec:max_entropy}.
+Note that this distribution is similar to the Boltzmann distribution, which is used in statistical mechanics to describe a system at thermal equilibrium.
 
-\subsection{Bayesian model selection}
+The model $\mathcal{M}$ is defined as a subset of $\Omega_n \setminus \{ \phi^0 \}$ and $g_{\boldsymbol{\mu}} \in {\mathbb{C}}$ is a model parameter. 
+The magnitude of the parameter indicates the strength of the interaction between the spin variables in $\boldsymbol{\mu}$ and the direction of $g_{\boldsymbol{\mu}}$ tells us for which $\boldsymbol{\alpha}$ the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $p(\boldsymbol{\alpha})$ is maximized.
 
-In Bayesian model selection the model that best fits the data corresponds to the model with the largest posterior probability, $P(\mathcal{M} | \mathbf{\hat{s}})$, which is the probability of the model given the dataset $\mathbf{\hat{s}} = (\mathbf{s}^{(1)} \dots \mathbf{s}^{(N)})$ containing N observed configurations.
-Using Bayes' theorem, the posterior probability can be expressed in terms of the evidence, $P(\mathbf{\hat{s}}|\mathcal{M})$, which is the likelihood of the model given the observed dataset.
+\noindent
+If we set $g_{\boldsymbol{\mu}} = 0 \quad \forall \boldsymbol{\mu} \notin \mathcal{M}$ and $g_0 = -\log Z(\mathbf{g}, \mathcal{M})$, we can write the probability distribution as
 
 \begin{equation}
-    P(\mathcal{M} | \mathbf{\hat{s}}) = \frac{P(\mathbf{\hat{s}}|\mathcal{M}) \: P(\mathcal{M}) }{\sum_{\mathcal{M}^\prime}P(\mathbf{\hat{s}}|\mathcal{M}^\prime) \: P(\mathcal{M}^\prime)}
+    p(\boldsymbol{\alpha}) =e^{S(\boldsymbol{\alpha})}\label{eq:p_alpha_s_alpha}
 \end{equation}
 
 \noindent
-The sum in the denominator runs of all the different models that we consider and $P(\mathcal{M})$ is the prior probability of the model.
-Without a preference for any model before the observed data, we choose a uniform prior distribution.
-As a consequence, the model with the largest evidence will be the model with the largest posterior probability.
-Because the likelihood of the model depends on the chosen model parameters, $g_\mu$, we can write is as
+with
 
 \begin{align}
-    P(\mathbf{\hat{s}}|\mathcal{M}) &= \int d\mathbf{g} P(\mathbf{\hat{s}} | \mathbf{g}, \mathcal{M}) P_0(\mathbf{g}|\mathcal{M}), \\
-    &= \int d\mathbf{g} \prod_{i=1}^N P(\mathbf{s}^{(i)} | \mathbf{g}, \mathcal{M}) P_0(\mathbf{g}|\mathcal{M}). \notag
+    S(\boldsymbol{\alpha}) &= \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}),\notag \\
+    &= \bigotimes_{i = 1}^{n} \mathbf{S}^{(q)} \cdot \mathbf{g}.\label{eq:s_alpha}
 \end{align}
 
 \noindent
-The probability of a single observations $\mathbf{s}^{(i)}$ for a given model and model parameters is the probability defined in Equation \ref{eq:prob_distr}, which allows us to rewrite the evidence as
+In Appendix \ref{sec:2spin_2states} a small example is worked out for a 2-state,2-spin system.
+Note that in the case with more than two states, $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ can be a complex number. However, $S(\boldsymbol{\alpha})$ has to be a real function to get real, positive probabilities.
+In order to guarantee $S(\boldsymbol{\alpha})$ being real, the following constraint is set for the model parameters.
+
+\begin{equation}
+    g_{-\boldsymbol{\mu}} = g_{\boldsymbol{\mu}}^*.
+\end{equation}
+
+
+\noindent
+We can also split the model parameter into a real and imaginary part,
+
+\begin{equation}
+    g_{\boldsymbol{\mu}} = a_{\boldsymbol{\mu}} + i b_{\boldsymbol{\mu}},
+\end{equation}
+
+\noindent
+in which case the constraint becomes
+
+\begin{equation}
+    \begin{cases}
+        a_{-\boldsymbol{\mu}} = a_{\boldsymbol{\mu}}\\
+        b_{-\boldsymbol{\mu}} = -b_{\boldsymbol{\mu}}
+    \end{cases}
+    .
+\end{equation}
+
+\noindent
+Using these constraints, we can rewrite the function $S(\boldsymbol{\alpha})$,
 
 \begin{align*}
-    P(\mathbf{\hat{s}}|\mathcal{M}) &= \int d\mathbf{g} \prod_{i=1}^N \frac{1}{Z_\mathbf{g}(\mathcal{M})} \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu \phi^\mu(\mathbf{s}^{(i)}) \right) P_0(\mathbf{g}|\mathcal{M}), \\
-    &= \int d\mathbf{g} \prod_{i=1}^N \text{exp}\left(\sum_{\mu \in \mathcal{M}} \left[ g_\mu \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
-    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{i=1}^N \sum_{\mu \in \mathcal{M}} \left[ g_\mu \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
-    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu \sum_{i=1}^N \left[ \phi^\mu(\mathbf{s}^{(i)}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}), \\
-    &= \int d\mathbf{g} \: \text{exp}\left(\sum_{\mu \in \mathcal{M}} g_\mu N \left[ \phi^\mu(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}),
+    S(\boldsymbol{\alpha}) =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}),\\
+    =& \frac{1}{2} \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) + g_{-\boldsymbol{\mu}} \phi^{-\boldsymbol{\mu}}(\boldsymbol{\alpha}),\\
+    =& \frac{1}{2} \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} (a_{\boldsymbol{\mu}} + i b_{\boldsymbol{\mu}}) \left[ \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) + i \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right)\right] \\
+    &+ (a_{\boldsymbol{\mu}} - i b_{\boldsymbol{\mu}}) \left[ \cos \left( -\frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) + i \sin \left( -\frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right)\right],\\
+    =&  \frac{1}{2} \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} a_{\boldsymbol{\mu}} \left[ \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) + i \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) + \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - i \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) \right]\\
+    &+ b_{\boldsymbol{\mu}} \left[ i \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) - i \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right) \right], \\
+    =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} a_{\boldsymbol{\mu}} \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) - b_{\boldsymbol{\mu}} \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu} \right).
 \end{align*}
 
 \noindent
-where $\phi^\mu(\mathbf{\hat{s}})$ is the empirical average of the operator $\phi^\mu$.
+Representing complex numbers as vectors, $z = \begin{bmatrix} \Re(z) & \Im(z) \end{bmatrix}^\intercal$, allows us to write
 
 \begin{equation}
-    \phi^\mu(\mathbf{\hat{s}}) = \frac{1}{N} \sum_{i=1}^N \phi^\mu(\mathbf{s}^{(i)})
+    g_{\boldsymbol{\mu}} = \begin{bmatrix} a & b \end{bmatrix}^\intercal,
 \end{equation}
-
-\noindent
-Defining $\mathbf{\phi}(\mathbf{\hat{s}})$ as a vector of length $|\mathcal{M}|$ with the entries of $\phi^\mu(\mathbf{\hat{s}})$ for every operator $\mu$, gives the following expression for the evidence of the model
-
-\begin{equation} \label{eq:evidence}
-    P(\mathbf{\hat{s}}|\mathcal{M}) = \int d\mathbf{g} \: \text{exp}\left( N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \right) P_0(\mathbf{g}|\mathcal{M}).
-\end{equation}
-
-\noindent
-In this expression we can recognize the log-likelihood of the model parameters given the observed dataset,
-
-\begin{equation} \label{eq:log_likelihood}
-    \log P(\mathbf{\hat{s}} | \mathbf{g}, \mathcal{M}) = N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right].
-\end{equation}
-
-\noindent
-In Appendix \ref{sec:max_log_likelihood} it is shown that for the model parameters that maximize the log-likelihood the expected value for every spin operator considered in the model is equal to the empirical average of that spin operator, which are exactly the used constraints in the construction of the probability distribution that maximizes the entropy.
-
-If the number of observations is large, we can approximate the integral in Equation \ref{eq:evidence} using Laplace's method because the integral will be sharply peaked around the maximum with respect to the model parameters.
-The derivation is given in Appendix \ref{sec:laplace} and allows us to write the log-evidence as
 
 \begin{equation}
-    \log P(\mathbf{\hat{s}}|\mathcal{M}) \approx \log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) -  \frac{|\mathcal{M}|}{2} \log \frac{N}{2 \pi} - \log \left[ \frac{\sqrt{\text{det } \mathbb{J}(\mathbf{g}^\star)}}{P_0(\mathbf{g}^\star|\mathcal{M})} \right]
+    \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) = \begin{bmatrix} \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) & \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) \end{bmatrix}^\intercal.
 \end{equation}
 
+\noindent
+Now, we can recognize that the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $S(\boldsymbol{\alpha})$ is the inner product of $g_{\boldsymbol{\mu}}$ with $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
 
+\begin{align}
+    S(\boldsymbol{\alpha}) =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \begin{bmatrix}
+        a & -b
+    \end{bmatrix}\begin{bmatrix}
+        \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) \\ \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right)
+    \end{bmatrix}, \notag \\
+    =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \begin{bmatrix}
+        a & b
+    \end{bmatrix}^*\begin{bmatrix}
+        \cos \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right) \\ \sin \left( \frac{2\pi}{q} \boldsymbol{\alpha} \cdot \boldsymbol{\mu}\right)
+    \end{bmatrix}, \notag \\
+    =& \sum_{\boldsymbol{\mu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \langle g_{\boldsymbol{\mu}}, \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) \rangle.
+\end{align}
+
+\noindent
+As shown in Figure \ref{fig:S_a}, this inner product can geometrically be seen as the projection of $g_{\boldsymbol{\mu}}^*$ onto $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
+The value of this inner product is
+
+\begin{equation}
+    \langle g_{\boldsymbol{\mu}}, \phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha}) \rangle = |g_{\boldsymbol{\mu}}| \cos \theta,
+\end{equation}
+
+\noindent
+where $\theta$ is the angle between $g_{\boldsymbol{\mu}}^*$ and $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
+This means that for a given magnitude of the model parameter, the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $S(\boldsymbol{\alpha})$ is maximized if $g_{\boldsymbol{\mu}}^*$ and $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ are exactly aligned.
+Note that due to the constraints, the contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ is the same as the contribution of $\phi^{-\boldsymbol{\mu}}(\boldsymbol{\alpha})$.
+Therefore, only one of the contributions will be drawn in future examples.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=4,cap=round,>=latex]
+        % draw the coordinates
+        \draw[] (-1.3cm,0cm) -- (1.3cm,0cm) node[right,fill=white] {};
+        \draw[] (0cm,-1.3cm) -- (0cm,1.3cm) node[above,fill=white] {};
+
+        % draw the unit circle
+        \draw[thick] (0cm,0cm) circle(1cm);
+
+        %coordinates for angle
+        \coordinate (O) at (0,0);
+        \coordinate (G) at (200:1cm);
+        \coordinate (P) at (240:1cm);
+
+        %phi_mu
+        \draw[blue, ->, very thick] (0cm,0cm) -- (120:1cm);
+        \draw (120:1.2cm) node[fill=white] {$\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$};
+    
+        %phi_-mu
+        \draw[blue, ->, very thick] (0cm,0cm) -- (240:1cm);
+        \draw (240:1.2cm) node[fill=white] {$\phi^{-\boldsymbol{\mu}}(\boldsymbol{\alpha})$};
+
+        %g1
+        %\draw[red, ->, very thick, dashed] (0cm,0cm) -- (260:1cm);
+        %\draw (260:1.2cm) node[fill=white] {$g_\mu$};
+
+        %g_mu*
+        \draw[red, ->, very thick] (0cm,0cm) -- (160:1cm);
+        \draw (160:1.15cm) node[fill=white] {$g_{\boldsymbol{\mu}}^*$};
+
+        %g_-mu*
+        \draw[red, ->, very thick] (0cm,0cm) -- (200:1cm);
+        \draw (200:1.15cm) node[fill=white] {$g_{-\boldsymbol{\mu}}^*$};
+
+        %a1
+        %\draw[dashed] (100:1cm) -- (260:1cm);
+        \draw[dashed] (160:1cm) -- (200:1cm);
+        \draw [decorate,decoration={brace,amplitude=5pt,raise=0.1ex}]
+        (0,0) -- (-0.939692,0) node[midway,yshift=-1em]{$a$};
+
+        %b1
+        %\draw[dashed] (260:1cm) -- (270: .9848cm);
+        %\draw [decorate,decoration={brace,amplitude=5pt,raise=0.7ex}]
+        %(0,0) -- (0,-.9848) node[midway,xshift=.4cm]{$b$};
+
+        %b1 tilde
+        \draw[dashed] (160:1cm) -- (90: .3420cm);
+        \draw [decorate,decoration={brace,amplitude=5pt, mirror,raise=0.7ex}]
+        (0,0) -- (0,.3420) node[midway,xshift=.6cm]{$-b$};
+
+        %projection
+        \draw[dashdotted] (160:1cm) -- (120:.7660cm);
+        \filldraw[black] (120:.7660cm) circle(0.6pt);
+        %\draw [decorate,decoration={brace,amplitude=5pt, mirror,raise=1ex}]
+        %(0,0) -- (120:.7660) node[midway,xshift=1.3cm, yshift=0.6cm]{$|g_{\boldsymbol{\mu}}^*| \cos \theta$};
+
+        \draw[dashdotted] (200:1cm) -- (240:.7660cm);
+        \filldraw[black] (240:.7660cm) circle(0.6pt);
+        \draw pic[-,"\small $\theta$",draw=black,angle radius=30,angle eccentricity=1.3] {angle=G--O--P};
+        \draw [decorate,decoration={brace,amplitude=5pt,raise=0.6ex}]
+        (0,0) -- (240:.7660) node[midway,xshift=.85cm, yshift=-.5cm]{$|g_{\boldsymbol{\mu}}^*| \cos \theta$};
+
+
+        % draw the horizontal and vertical coordinates
+        \draw (1.3cm,0cm)  node[above=1pt] {$\Re$}
+            (0cm,1.3cm)  node[fill=white] {$\Im$};
+    \end{tikzpicture}
+    \caption{Contribution of $\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})$ to $S(\boldsymbol{\alpha})$ drawn as an inner product.}
+    \label{fig:S_a}
+\end{figure}
+
+\subsubsection{Parameter inference}
+
+For a complete model, there exists a bijective relation between $p(\boldsymbol{\alpha})$ and the model parameters, which allows us to construct an expression for the model parameters in terms of $p(\boldsymbol{\alpha})$.
+Starting from Equation \ref{eq:p_alpha_s_alpha} we can write
+
+\begin{align*}
+    \log p(\boldsymbol{\alpha}) &= S(\boldsymbol{\alpha}),\\
+    &= \sum_{\boldsymbol{\nu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\nu}} \phi^{\boldsymbol{\nu}}(\boldsymbol{\alpha}),
+\end{align*}
+
+\noindent
+Multiplying both sides by $\left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^*$ and summing over all possible states $\boldsymbol{\alpha}$ gives 
+
+\begin{align*}
+    \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^* \log p(\boldsymbol{\alpha}) &= \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \sum_{\boldsymbol{\nu} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\nu}} \phi^{\boldsymbol{\nu}}(\boldsymbol{\alpha}) \left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^*\\
+    &= \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} g_{\boldsymbol{\mu}} + \sum_{\substack{\boldsymbol{\nu} \in {(\mathbb{Z}/q\mathbb{Z})}^n \\ \boldsymbol{\nu} \neq \boldsymbol{\mu}}} g_{\boldsymbol{\nu}} \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \phi^{\boldsymbol{\nu} - \boldsymbol{\mu}}(\boldsymbol{\alpha})
+\end{align*}
+
+\noindent
+Given that the $\sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \phi^{\boldsymbol{\mu}} = 0 \quad \forall \boldsymbol{\mu} \neq \mathbf{0}$, we obtain that
+
+\begin{align*}
+    g_{\boldsymbol{\mu}} = \frac{1}{q^n}  \sum_{\boldsymbol{\alpha} \in {(\mathbb{Z}/q\mathbb{Z})}^n} \left[\phi^{\boldsymbol{\mu}}(\boldsymbol{\alpha})\right]^* \log p(\boldsymbol{\alpha})
+\end{align*}

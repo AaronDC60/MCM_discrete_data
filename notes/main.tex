@@ -7,10 +7,12 @@
 \documentclass{uva-inf-article}
 \usepackage[english]{babel}
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing, angles,quotes}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[title]{appendix}
-
+\usepackage{lscape}
 \usepackage{booktabs}
 \usepackage{mathtools} % \shortintertext{}
 \usepackage{physics}
@@ -33,6 +35,7 @@
 \numberwithin{equation}{section}
 % Format picture captions
 \usepackage[margin={-30pt,20pt}, indention= 2em, font=small,labelfont=bf, labelsep=period]{caption}
+%\usepackage{caption}
 \usepackage{subcaption}
 % Redefine Figure in Multicol 
 \newenvironment{Figure}
@@ -46,6 +49,9 @@
 \addbibresource{references.bib}
 
 \allowdisplaybreaks
+
+\usepackage{framed}
+
 
 %-------------------------------------------------------------------------------
 %	GEGEVENS VOOR IN DE TITEL, HEADER EN FOOTER
@@ -92,8 +98,16 @@
 % Hanteer bij benadering IMRAD: Introduction, Method, Results, Discussion.
 \justifying
 
+% Theory section
 \input{theory/theory_section}
+\input{theory/bms}
+
+% Appendix
 \input{appendix/derivations}
+\clearpage
+\input{appendix/spin_model_examples.tex}
+\clearpage
+\input{appendix/polar_coordinates.tex}
 
 
 %\printbibliography

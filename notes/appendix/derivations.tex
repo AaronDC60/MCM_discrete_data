@@ -132,7 +132,7 @@ which shows that at the maximum of the log-likelihood
 
 \subsection{Expression for evidence using Laplace's method} \label{sec:laplace}
 
-Because the value of the integral in Equation \ref{eq:evidence} is dominated by a single contribution at the maximum, we can replace the terms that depend on the model parameters by their second-order Taylor expansion around the model parameters, $\mathbf{g}^\star$, that maximize the evidence.
+Because the value of the integral in Equation \ref{eq:evidence} is dominated by a single contribution at the maximum, we can replace the term in the exponential by its second-order Taylor expansion around the model parameters, $\mathbf{g}^\star$, that maximize the evidence.
 
 \begin{align*}
   N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \approx& \: N  \left[ \mathbf{g}^\star \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g^\star}(\mathcal{M})} \right] + (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ N  \left[ \mathbf{g} \cdot \mathbf{\phi}(\mathbf{\hat{s}}) - \log {Z_\mathbf{g}(\mathcal{M})} \right] \bigr](\mathbf{g}^\star) \\
@@ -141,12 +141,12 @@ Because the value of the integral in Equation \ref{eq:evidence} is dominated by 
 %=& \log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) - \frac{N}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J}(\mathbf{g}^\star)(\mathbf{g} - \mathbf{g}^\star)
 \end{align*}
 
-\begin{equation*}
-  P_0(\mathbf{g}|\mathcal{M}) \approx \: P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)
-\end{equation*}
+%\begin{equation*}
+%  P_0(\mathbf{g}|\mathcal{M}) \approx \: P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)
+%\end{equation*}
 
 \noindent
-Plugging these expansions into the expression for the evidence and using the definition of the Fisher information matrix, which has as entries
+Plugging this expansion into the expression for the evidence and using the definition of the Fisher information matrix, which has as entries
 
 \begin{equation}
     \mathbb{J}_{\mu\nu}(\mathbf{g}) = \frac{\partial^2 \log {Z_\mathbf{g}(\mathcal{M})}}{\partial g_\mu \partial g_\nu},
@@ -154,17 +154,24 @@ Plugging these expansions into the expression for the evidence and using the def
 
 \noindent
 gives the following expression for the evidence.
+
 \begin{align*}
-    P(\mathbf{\hat{s}}|\mathcal{M}) \approx& \int d\mathbf{g} \: e^{\log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) - \frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
-    & \left( P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right) \\
-   =& \int d\mathbf{g} \: P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M})  e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
-   &\left( P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right) \\
+    P(\mathbf{\hat{s}}|\mathcal{M}) \approx& \int d\mathbf{g} \: e^{\log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) - \frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} P_0(\mathbf{g}|\mathcal{M}) \\
+   =& \int d\mathbf{g} \: P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M})  e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} P_0(\mathbf{g}|\mathcal{M}) \\
    =& P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) P_0(\mathbf{g}^\star|\mathcal{M}) \int d\mathbf{g} \: e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
-   &\left(1 + \frac{1}{P_0(\mathbf{g}^\star|\mathcal{M})} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2 P_0(\mathbf{g}^\star|\mathcal{M})} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right)
 \end{align*}
 
+%\begin{align*}
+%    P(\mathbf{\hat{s}}|\mathcal{M}) \approx& \int d\mathbf{g} \: e^{\log P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) - \frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
+%    & \left( P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right) \\
+%   =& \int d\mathbf{g} \: P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M})  e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
+%   &\left( P_0(\mathbf{g}^\star|\mathcal{M}) +  (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right) \\
+%   =& P(\mathbf{\hat{s}} | \mathbf{g}^\star, \mathcal{M}) P_0(\mathbf{g}^\star|\mathcal{M}) \int d\mathbf{g} \: e^{-\frac{N}{2}  (\mathbf{g} - \mathbf{g}^\star)^\intercal \mathbb{J} (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star)} \\
+%   &\left(1 + \frac{1}{P_0(\mathbf{g}^\star|\mathcal{M})} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla \bigl[ P_0(\mathbf{g}|\mathcal{M})\bigr](\mathbf{g}^\star) + \frac{1}{2 P_0(\mathbf{g}^\star|\mathcal{M})} (\mathbf{g} - \mathbf{g}^\star)^\intercal \nabla^2 \bigl[ P_0(\mathbf{g}|\mathcal{M}) \bigr] (\mathbf{g}^\star) (\mathbf{g} - \mathbf{g}^\star) \right)
+%\end{align*}
+
 \noindent
-The leading term in this integral is a multidimensional Gaussian integral. Because the Fisher information matrix is symmetric, we can decompose it as,
+The integral is a multidimensional Gaussian integral. Because the Fisher information matrix is symmetric, we can decompose it as,
 
 \begin{equation*}
     \mathbb{J} = Q \Lambda Q^\intercal,

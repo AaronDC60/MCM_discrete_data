@@ -1,0 +1,175 @@
+Start divide and conquer procedure
+
+Start moving members from community 0 to community 1
+Community 0 : 111111111
+
+Best split (intermediate): moving member 0 from community 0 to community 1 Evidence difference: -200.927
+Community 0 : 011111111
+Community 1 : 100000000
+
+Best split (intermediate): moving member 1 from community 0 to community 1 Evidence difference: -117.605
+Community 0 : 101111111
+Community 1 : 010000000
+
+Start moving members from community 0 to community 1
+Community 0 : 101111111
+Community 1 : 010000000
+
+Best split (intermediate): moving member 0 from community 0 to community 1 Evidence difference: -332.532
+Community 0 : 001111111
+Community 1 : 110000000
+
+Best split (intermediate): moving member 2 from community 0 to community 1 Evidence difference: -293.763
+Community 0 : 100111111
+Community 1 : 011000000
+
+Best split (intermediate): moving member 4 from community 0 to community 1 Evidence difference: -284.035
+Community 0 : 101101111
+Community 1 : 010010000
+
+Best split (intermediate): moving member 5 from community 0 to community 1 Evidence difference: -215.374
+Community 0 : 101110111
+Community 1 : 010001000
+
+Best split (intermediate): moving member 7 from community 0 to community 1 Evidence difference: -196.608
+Community 0 : 101111101
+Community 1 : 010000010
+
+Best split (intermediate): moving member 8 from community 0 to community 1 Evidence difference: -195.662
+Community 0 : 101111110
+Community 1 : 010000001
+
+Start moving members from community 0 to community 1
+Community 0 : 101111110
+Community 1 : 010000001
+
+Best split (intermediate): moving member 0 from community 0 to community 1 Evidence difference: -388.971
+Community 0 : 001111110
+Community 1 : 110000001
+
+Best split (intermediate): moving member 2 from community 0 to community 1 Evidence difference: -284.674
+Community 0 : 100111110
+Community 1 : 011000001
+
+Best split (intermediate): moving member 5 from community 0 to community 1 Evidence difference: -220.098
+Community 0 : 101110110
+Community 1 : 010001001
+
+Best split (intermediate): moving member 7 from community 0 to community 1 Evidence difference: -168.261
+Community 0 : 101111100
+Community 1 : 010000011
+
+Start moving members from community 0 to community 1
+Community 0 : 101111100
+Community 1 : 010000011
+
+Best split (intermediate): moving member 0 from community 0 to community 1 Evidence difference: -357.805
+Community 0 : 001111100
+Community 1 : 110000011
+
+Best split (intermediate): moving member 2 from community 0 to community 1 Evidence difference: -267.281
+Community 0 : 100111100
+Community 1 : 011000011
+
+Best split (intermediate): moving member 5 from community 0 to community 1 Evidence difference: 5.15111
+Community 0 : 101110100
+Community 1 : 010001011
+
+New best split
+Community 0 : 101110100
+Community 1 : 010001011
+
+Start moving members from community 0 to community 1
+Community 0 : 101110100
+Community 1 : 010001011
+
+Best split (intermediate): moving member 0 from community 0 to community 1 Evidence difference: -196.226
+Community 0 : 001110100
+Community 1 : 110001011
+
+Best split (intermediate): moving member 2 from community 0 to community 1 Evidence difference: -53.3884
+Community 0 : 100110100
+Community 1 : 011001011
+
+Start moving members from community 0 to community 1
+Community 0 : 100110100
+Community 1 : 011001011
+
+Best split (intermediate): moving member 0 from community 0 to community 1 Evidence difference: -136.716
+Community 0 : 000110100
+Community 1 : 111001011
+
+Best split (intermediate): moving member 4 from community 0 to community 1 Evidence difference: -102.265
+Community 0 : 100100100
+Community 1 : 011011011
+
+Start moving members from community 0 to community 1
+Community 0 : 100100100
+Community 1 : 011011011
+
+Best split (intermediate): moving member 0 from community 0 to community 1 Evidence difference: -58.7327
+Community 0 : 000100100
+Community 1 : 111011011
+
+Start moving members from community 0 to community 2
+Community 0 : 101110100
+Community 1 : 010001011
+
+Best split (intermediate): moving member 0 from community 0 to community 2 Evidence difference: -338.652
+Community 0 : 001110100
+Community 1 : 010001011
+Community 2 : 100000000
+
+Best split (intermediate): moving member 2 from community 0 to community 2 Evidence difference: -259.808
+Community 0 : 100110100
+Community 1 : 010001011
+Community 2 : 001000000
+
+Start moving members from community 0 to community 2
+Community 0 : 100110100
+Community 1 : 010001011
+Community 2 : 001000000
+
+Best split (intermediate): moving member 0 from community 0 to community 2 Evidence difference: -349.69
+Community 0 : 000110100
+Community 1 : 010001011
+Community 2 : 101000000
+
+Best split (intermediate): moving member 4 from community 0 to community 2 Evidence difference: -325.565
+Community 0 : 100100100
+Community 1 : 010001011
+Community 2 : 001010000
+
+Start moving members from community 0 to community 2
+Community 0 : 100100100
+Community 1 : 010001011
+Community 2 : 001010000
+
+Best split (intermediate): moving member 0 from community 0 to community 2 Evidence difference: -244.674
+Community 0 : 000100100
+Community 1 : 010001011
+Community 2 : 101010000
+
+Start moving members from community 1 to community 2
+Community 0 : 101110100
+Community 1 : 010001011
+
+Best split (intermediate): moving member 1 from community 1 to community 2 Evidence difference: -240.798
+Community 0 : 101110100
+Community 1 : 000001011
+Community 2 : 010000000
+
+Start moving members from community 1 to community 2
+Community 0 : 101110100
+Community 1 : 000001011
+Community 2 : 010000000
+
+Best split (intermediate): moving member 5 from community 1 to community 2 Evidence difference: -391.544
+Community 0 : 101110100
+Community 1 : 000000011
+Community 2 : 010001000
+
+Best split (intermediate): moving member 8 from community 1 to community 2 Evidence difference: -362.85
+Community 0 : 101110100
+Community 1 : 000001010
+Community 2 : 010000001
