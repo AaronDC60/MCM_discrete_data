@@ -14,7 +14,8 @@ map<int, int> count_observations(mcm& model, int community){
         j = community;
         while(j){
             if (j & 1){
-                state += (obs[i] * pow(model.q, i));
+                //state += (obs[i] * pow(model.q, i));
+                state += (obs[i] * model.pow_q[i]);
             }
             i++;
             j >>= 1;
