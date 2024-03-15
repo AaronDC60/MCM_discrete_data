@@ -20,6 +20,7 @@ add_subdirectory(Model)
 add_subdirectory(Search_Algorithms)
 
 add_executable(${PROJECT_NAME} main.cpp)
+#add_executable(${PROJECT_NAME} timing.cpp)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Model Search_Algorithms)
 target_include_directories(${PROJECT_NAME} PUBLIC

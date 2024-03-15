@@ -26,6 +26,24 @@ unordered_map<int, int> count_observations(mcm& model, int community){
     return counts;
 }
 
+double get_evidence_icc(int community, mcm& model){
+    double log_evidence;
+    // Check if it evidence for this community is already calculated
+    unordered_map<int, double>::iterator result = model.evidence_storage.find(community);
+    if (result == model.evidence_storage.end()){
+        // Not found -> needs to be calculated
+        int r = community_size(community);
+        log_evidence = calc_evidence_icc(community, model, r);
+        // Store the result
+        model.evidence_storage[community] = log_evidence;
+    }
+    else{
+        // Retrieve value from storage
+        log_evidence = model.evidence_storage[community];
+    }
+    return log_evidence;
+}
+
 double calc_evidence_icc(int community, mcm& model, int r){
     double log_evidence = 0;
     // Contributions from the different observations
@@ -47,8 +65,9 @@ double calc_evidence(vector<int> partition, mcm& model){
     // Iterate over all the ICCs in the partition
     for (int community : partition){
         if (community){
-            r = community_size(community);
-            log_evidence += calc_evidence_icc(community, model, r);
+            //r = community_size(community);
+            //log_evidence += calc_evidence_icc(community, model, r);
+            log_evidence += get_evidence_icc(community, model);
         }
     }
     return log_evidence;

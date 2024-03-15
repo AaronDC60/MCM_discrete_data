@@ -24,12 +24,15 @@ struct mcm {
     // Powers of q
     vector<int> pow_q;
 
+    // Storage of log-evidence for communities
+    unordered_map<int, double> evidence_storage;
+
     // Output file to store search steps
     bool log_file;
     ofstream greedy_file;
     ofstream divide_and_conquer_file;
 
-    // Structure of the best MCM
+    // Structure of the best MCM(s)
     vector<vector<int>> best_mcm;
     // Evidence of the best MCM
     double best_evidence = -DBL_MAX;
@@ -43,6 +46,7 @@ mcm create_model(vector<vector<int>> data, int q, int n, bool log_file);
 
 // Evidence
 unordered_map<int, int> count_observations(mcm& model, int community);
+double get_evidence_icc(int community, mcm& model);
 double calc_evidence_icc(int community, mcm& model, int r);
 double calc_evidence(vector<int> partition, mcm& model);
 
