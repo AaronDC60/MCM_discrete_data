@@ -80,7 +80,10 @@ int main(int argc, char* argv[]){
         outputFile << "Exhaustive search: " << duration.count() << "ms \n" << '\n';
         outputFile << "Number of best MCMs found : " << model.best_mcm.size() << "\n\n";
         outputFile << "Best MCM(s): " << endl;
-        print_partition_to_file(outputFile, model.best_mcm[0]);
+        for(int i = 0; i < model.best_mcm.size(); ++i){
+            print_partition_to_file(outputFile, model.best_mcm[i]);
+            outputFile << "\n";
+        }
         outputFile << "Best log-evidence: " << model.best_evidence << "\n" << '\n';
     }
 
