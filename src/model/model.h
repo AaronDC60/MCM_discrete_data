@@ -4,7 +4,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <float.h>
 #include <math.h>
 #include <bitset>
@@ -42,7 +42,7 @@ vector<vector<int>> data_processing(string file, int n);
 mcm create_model(vector<vector<int>> data, int q, int n, bool log_file);
 
 // Evidence
-map<int, int> count_observations(mcm& model, int community);
+unordered_map<int, int> count_observations(mcm& model, int community);
 double calc_evidence_icc(int community, mcm& model, int r);
 double calc_evidence(vector<int> partition, mcm& model);
 

@@ -6,7 +6,7 @@ TEST(evidence, count_obs){
     vector<vector<int>> data = data_processing("../tests/test.dat", 3);
     mcm model = create_model(data, 3, 3, false);
 
-    map<int, int> counts;
+    unordered_map<int, int> counts;
     // Community = 1
     counts = count_observations(model, 1);
     EXPECT_EQ(counts.size(), 3);

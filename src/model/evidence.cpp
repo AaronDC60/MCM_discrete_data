@@ -1,11 +1,11 @@
 #include "model.h"
 
 // Count all the different observations in the dataset for a given community
-map<int, int> count_observations(mcm& model, int community){
+unordered_map<int, int> count_observations(mcm& model, int community){
     // Trackers for the bit count
     int i;
     int j;
-    map<int, int> counts;
+    unordered_map<int, int> counts;
     // Loop over the entire dataset
     for (const vector<int>& obs : model.data){
         // Extract the substring corresponding to the community
@@ -29,8 +29,8 @@ map<int, int> count_observations(mcm& model, int community){
 double calc_evidence_icc(int community, mcm& model, int r){
     double log_evidence = 0;
     // Contributions from the different observations
-    map<int, int> counts = count_observations(model, community);
-    map<int, int>::iterator count_iter = counts.begin();
+    unordered_map<int, int> counts = count_observations(model, community);
+    unordered_map<int, int>::iterator count_iter = counts.begin();
     while (count_iter != counts.end()){
         log_evidence += (lgamma(count_iter->second + 0.5) - 0.5 * log(M_PI));
         count_iter++;
