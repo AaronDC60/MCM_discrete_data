@@ -36,9 +36,12 @@ void divide_and_conquer(mcm&model){
         partition[0] += element;
         element <<= 1;
     }
-    model.best_mcm = partition;
+    model.best_mcm.push_back(partition);
+    model.best_evidence = calc_evidence(model.best_mcm[0], model);
 
-    model.divide_and_conquer_file << "Start divide and conquer procedure" << endl;
+    if(model.log_file){
+        model.divide_and_conquer_file << "Start divide and conquer procedure" << endl;
+    }
 
     // Start recursive algorithm with moving element from first to the second community
     divide_and_conquer_recursive(0, 1, model, 1);
@@ -46,13 +49,13 @@ void divide_and_conquer(mcm&model){
 
 int divide_and_conquer_recursive(int move_from, int move_to, mcm& model, int first_empty){
     // Number of member in the community that we want to split
-    int n_members_1 = community_size(model.best_mcm[move_from]);
+    int n_members_1 = community_size(model.best_mcm[0][move_from]);
     int n_members_2 = 0;
     // Check if the community can be split
     if (n_members_1 == 1){return first_empty;}
 
     // Hard copy of the starting partition
-    vector<int> partition = model.best_mcm;
+    vector<int> partition = model.best_mcm[0];
 
     // Variables for the difference in evidence before and after split
     double best_evidence_diff = 0;
@@ -70,7 +73,6 @@ int divide_and_conquer_recursive(int move_from, int move_to, mcm& model, int fir
     // Variable to indicate which member is moving
     int member;
 
-    //first_empty += 1;
     double evidence_unsplit_community = calc_evidence_icc(partition[move_from], model, n_members_1);
     n_members_1 -= 1;
     n_members_2 += 1;
@@ -82,9 +84,11 @@ int divide_and_conquer_recursive(int move_from, int move_to, mcm& model, int fir
         community_1 = unsplit_community;
         community_2 = partition[move_to];
 
-        // Write to file
-        model.divide_and_conquer_file << "\nStart moving members from community " << move_from << " to community " << move_to << endl;
-        print_partition_to_file(model.divide_and_conquer_file, partition);
+        if(model.log_file){
+            // Write to file
+            model.divide_and_conquer_file << "\nStart moving members from community " << move_from << " to community " << move_to << endl;
+            print_partition_to_file(model.divide_and_conquer_file, partition);
+        }
 
         for (int i = 0; i <= n_members_1; i++){
             // Move member i from first partition to second
@@ -104,9 +108,11 @@ int divide_and_conquer_recursive(int move_from, int move_to, mcm& model, int fir
                 partition[move_from] = best_community_1;
                 partition[move_to] = best_community_2;
 
-                // Write to file
-                model.divide_and_conquer_file << "\nBest split (intermediate): moving member " << index_of_member(member) << " from community " << move_from << " to community " << move_to << " Evidence difference: " << best_evidence_diff_tmp << endl;
-                print_partition_to_file(model.divide_and_conquer_file, partition);
+                if(model.log_file){
+                    // Write to file
+                    model.divide_and_conquer_file << "\nBest split (intermediate): moving member " << index_of_member(member) << " from community " << move_from << " to community " << move_to << " Evidence difference: " << best_evidence_diff_tmp << endl;
+                    print_partition_to_file(model.divide_and_conquer_file, partition);
+                }
             }
 
             // Reset community 1 and 2
@@ -121,17 +127,19 @@ int divide_and_conquer_recursive(int move_from, int move_to, mcm& model, int fir
         if (best_evidence_diff_tmp > best_evidence_diff){
             best_evidence_diff = best_evidence_diff_tmp;
 
-            model.best_mcm[move_from] = best_community_1;
-            model.best_mcm[move_to] = best_community_2;
-            model.best_evidence = evidence_unsplit_community + best_evidence_diff;
+            model.best_mcm[0][move_from] = best_community_1;
+            model.best_mcm[0][move_to] = best_community_2;
+            model.best_evidence = calc_evidence(model.best_mcm[0], model);
 
-            // Write to file
-            model.divide_and_conquer_file << "\nNew best split" << endl;
-            print_partition_to_file(model.divide_and_conquer_file, partition);
+            if(model.log_file){
+                // Write to file
+                model.divide_and_conquer_file << "\nNew best split" << endl;
+                print_partition_to_file(model.divide_and_conquer_file, partition);
+            }
         }
     }
     // Stop if there was no improvement
-    if (model.best_mcm[move_to] == 0){
+    if (model.best_mcm[0][move_to] == 0){
         return first_empty;
     }
     first_empty += 1;

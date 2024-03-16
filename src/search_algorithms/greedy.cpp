@@ -11,9 +11,11 @@ void greedy_search(mcm& model){
         element <<= 1;
     }
 
-    // Write to file
-    model.greedy_file << "Start greedy merging procedure \n" << endl;
-    print_partition_to_file(model.greedy_file, partition);
+    if(model.log_file){
+        // Write to file
+        model.greedy_file << "Start greedy merging procedure \n" << endl;
+        print_partition_to_file(model.greedy_file, partition);
+    }
 
     // Variables to store the calculated evidences
     double evidence_i;
@@ -58,12 +60,14 @@ void greedy_search(mcm& model){
             partition[best_i] += partition[best_j];
             partition[best_j] = 0;
 
-            // Write to file
-            model.greedy_file << "\nMerging communities " << best_i << " and " << best_j << " Evidence difference: "<<  best_evidence_diff << endl;
-            print_partition_to_file(model.greedy_file, partition);
+            if(model.log_file){
+                // Write to file
+                model.greedy_file << "\nMerging communities " << best_i << " and " << best_j << " Evidence difference: "<<  best_evidence_diff << endl;
+                print_partition_to_file(model.greedy_file, partition);
+            }
         }
     }
     // Store the best MCM found using the greedy merging scheme
-    model.best_mcm = partition;
+    model.best_mcm.push_back(partition);
     model.best_evidence = calc_evidence(partition, model);
 }
