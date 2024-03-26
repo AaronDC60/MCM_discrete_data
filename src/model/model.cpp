@@ -1,6 +1,6 @@
 #include "model.h"
 
-mcm create_model(vector<vector<int>> data, int q, int n, bool log_file){
+mcm create_model(vector<vector<int>>& data, int q, int n, bool log_file){
     // Create object
     mcm model;
     model.data = data;

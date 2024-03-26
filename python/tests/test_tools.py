@@ -36,35 +36,66 @@ def test_partitions():
 def test_int_to_string():
     # Base 2
     assert(tools.int_to_string(0,2,5) == '00000')
-    assert(tools.int_to_string(1,2,5) == '00001')
-    assert(tools.int_to_string(2,2,5) == '00010')
-    assert(tools.int_to_string(3,2,5) == '00011')
+    assert(tools.int_to_string(1,2,5) == '10000')
+    assert(tools.int_to_string(2,2,5) == '01000')
+    assert(tools.int_to_string(3,2,5) == '11000')
     assert(tools.int_to_string(4,2,5) == '00100')
-    assert(tools.int_to_string(19,2,5) == '10011')
+    assert(tools.int_to_string(19,2,5) == '11001')
 
     # Base 3
     assert(tools.int_to_string(0,3,4) == '0000')
-    assert(tools.int_to_string(1,3,4) == '0001')
-    assert(tools.int_to_string(2,3,4) == '0002')
-    assert(tools.int_to_string(3,3,4) == '0010')
-    assert(tools.int_to_string(4,3,4) == '0011')
-    assert(tools.int_to_string(5,3,4) == '0012')
-    assert(tools.int_to_string(73,3,4) == '2201')
+    assert(tools.int_to_string(1,3,4) == '1000')
+    assert(tools.int_to_string(2,3,4) == '2000')
+    assert(tools.int_to_string(3,3,4) == '0100')
+    assert(tools.int_to_string(4,3,4) == '1100')
+    assert(tools.int_to_string(5,3,4) == '2100')
+    assert(tools.int_to_string(73,3,4) == '1022')
 
 def test_string_to_int():
     # Base 2
     assert(tools.string_to_int('00000', 2) == 0)
-    assert(tools.string_to_int('00001', 2) == 1)
-    assert(tools.string_to_int('00010', 2) == 2)
-    assert(tools.string_to_int('00011', 2) == 3)
+    assert(tools.string_to_int('10000', 2) == 1)
+    assert(tools.string_to_int('01000', 2) == 2)
+    assert(tools.string_to_int('11000', 2) == 3)
     assert(tools.string_to_int('00100', 2) == 4)
-    assert(tools.string_to_int('10011', 2) == 19)
+    assert(tools.string_to_int('11001', 2) == 19)
 
     # Base 3
     assert(tools.string_to_int('0000', 3) == 0)
-    assert(tools.string_to_int('0001', 3) == 1)
-    assert(tools.string_to_int('0002', 3) == 2)
-    assert(tools.string_to_int('0010', 3) == 3)
-    assert(tools.string_to_int('0011', 3) == 4)
-    assert(tools.string_to_int('0012', 3) == 5)
-    assert(tools.string_to_int('2201', 3) == 73)
+    assert(tools.string_to_int('1000', 3) == 1)
+    assert(tools.string_to_int('2000', 3) == 2)
+    assert(tools.string_to_int('0100', 3) == 3)
+    assert(tools.string_to_int('1100', 3) == 4)
+    assert(tools.string_to_int('2100', 3) == 5)
+    assert(tools.string_to_int('1022', 3) == 73)
+
+def test_entropy():
+    assert(tools.entropy([1,0]) == 0)
+    assert(tools.entropy([1,0,0]) == 0)
+
+    assert(tools.entropy([0.25, 0.25, 0.25, 0.25]) == 2)
+    assert(tools.entropy([0.5, 0.5]) == 1)
+
+    assert(np.isclose(tools.entropy([0.75, 0.25]), 0.8112781244591))
+
+def test_mutual_inf():
+    comm_1 = ['000111', '111000']
+    comm_2 = ['000101', '000010', '111000']
+    n = len(comm_1[0])
+
+    comm_1 = [tools.string_to_int(comm_1[i], 2) for i in range(2)]
+    comm_2 = [tools.string_to_int(comm_2[i], 2) for i in range(3)]
+
+    # Normalized mutual information is maximal (= 1) between identical community structures
+    assert(tools.mutual_information(comm_1, comm_1, n, normalize=True) == 1)
+    assert(np.isclose(tools.mutual_information(comm_2, comm_2, n, normalize=True), 1))
+
+    # Non normalized mutual information between identical community structures is equal to the unconditional entropy
+    assert(tools.mutual_information(comm_1, comm_1, n) == tools.entropy([0.5, 0.5]))
+
+    # Mutual information between different community structures
+    mutual_inf = tools.mutual_information(comm_1, comm_2, n, normalize=False)
+    norm_mutual_inf = tools.mutual_information(comm_1, comm_2, n, normalize=True)
+    assert(np.isclose(mutual_inf, 1))
+    assert(np.isclose(norm_mutual_inf, mutual_inf / (0.5 * (tools.entropy([0.5, 0.5]) + tools.entropy([1/3, 1/6, 1/2])))))
+    assert(np.isclose(norm_mutual_inf, 0.8132898335036761))

@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 from python.utils import spin_ops
+from python.utils import tools
 
 def test_complete_model():
     with pytest.raises(TypeError):
@@ -116,3 +117,40 @@ def test_get_spin_op_indices():
     assert(spin_ops.get_spin_op_indices(4, [0,1], [1,1]) == (5,15))
     assert(spin_ops.get_spin_op_indices(4, [0,1], [1,2]) == (9,11))
     assert(spin_ops.get_spin_op_indices(4, [0,1], [1,3]) == (13,7))
+
+def test_spin_value():
+    # Base 2
+    assert(spin_ops.spin_value([0,0], op=1, q=2) == 0)
+    assert(spin_ops.spin_value([0,1], op=1, q=2) == 0)
+    assert(spin_ops.spin_value([0,1], op=2, q=2) == 1)
+    assert(spin_ops.spin_value([1,1], op=1, q=2) == 1)
+    assert(spin_ops.spin_value([0,1], op=3, q=2) == 1)
+    assert(spin_ops.spin_value([1,0], op=3, q=2) == 1)
+    assert(spin_ops.spin_value([1,1], op=3, q=2) == 0)
+
+    # Base 3
+    assert(spin_ops.spin_value([1,0], op=1, q=3) == 1)
+    assert(spin_ops.spin_value([2,0], op=1, q=3) == 2)
+    assert(spin_ops.spin_value([2,0], op=4, q=3) == 2)
+    assert(spin_ops.spin_value([2,1], op=4, q=3) == 0)
+
+    # Check if it corresponds to all entries of the spin operator matrix
+    s_matrix = spin_ops.construct_s_matrix(n=2, q=3)
+    for op in range(9):
+        for alpha_1 in range(3):
+            for alpha_2 in range(3):
+                state = tools.string_to_int('%i%i'%(alpha_1, alpha_2), q=3)
+                spin = spin_ops.spin_value([alpha_1,alpha_2], op, q=3)
+                assert(np.isclose(np.exp(spin * 2j * np.pi / 3), s_matrix[state, op]))
+
+def test_comb_ops():
+    # Base 2
+    assert(spin_ops.comb_ops(0, 7, q=2) == 7)
+    assert(spin_ops.comb_ops(0,7, q=2, cc=True) == (7,7))
+    assert(spin_ops.comb_ops(1,2, q=2, cc=True) == (3,3))
+    assert(spin_ops.comb_ops(3,6, q=2, cc=True) == (5,5))
+
+    # Base 3
+    assert(spin_ops.comb_ops(0,7, q=3, cc=True) == (7,5))
+    assert(spin_ops.comb_ops(3,4, q=3, cc=True) == (7,2))
+    assert(spin_ops.comb_ops(25,16, q=3, cc=True) == (5,9))

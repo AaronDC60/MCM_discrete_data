@@ -131,7 +131,7 @@ def int_to_string(integer, q, n):
     # Add leading zeros
     state += '0'*(n-len(state))
 
-    return state[::-1]
+    return state
 
 def string_to_int(string, q):
     """
@@ -150,10 +150,87 @@ def string_to_int(string, q):
         integer representation of the string
     """
     value = 0
-    # Flip the string to read from right to left
-    string = string[::-1]
 
     for i, element in enumerate(string):
         value += int(element) * q**i
     
     return value
+
+def entropy(prob_distr):
+    """
+    Calculate the entropy (using base 2) of a given probability distribution.
+
+    Parameters
+    ----------
+    prob_distr : array
+        list containing the probability distribution
+    
+    Returns
+    -------
+    value : float
+        entropy corresponding to the probability distribution (using base 2)
+    """
+    # H(x) = - sum[ p(x) log p(x) ]
+    value = 0
+    for p in prob_distr:
+        # Ignore zero probability (assume 0 log 0 = 0)
+        if p:
+            value -= (p * np.log2(p))
+    return value
+
+def mutual_information(comm_1, comm_2, n, normalize=True):
+    """
+    Calculate the mutual information (using base 2) between two community structures.
+
+    Parameters
+    ----------
+    comm_1 : array
+        list of representing the first community structure (communities represented as integers)
+    comm_2 : array
+        list of representing the second community structure (communities represented as integers)
+    n : int
+        number of variables
+    normalize : boolean, default True
+        option to return the normalized mutual information
+    
+    Returns
+    -------
+    mutual_inf : float
+        the mutual information between two community structures
+    """
+    # I(x, y) = sum [P(x, y) log [ P(x,y) / P(x) P(y) ] ]
+    mutual_inf = 0
+
+    # Number of communities in both structures
+    size_1 = len(comm_1)
+    size_2 = len(comm_2)
+
+    # Variables for probability distributions
+    p_1 = np.zeros(size_1)
+    p_2 = np.zeros(size_2)
+
+    # Loop over all communities in the first structure
+    for i in range(size_1):
+        c1 = comm_1[i]
+        # Probability to be in community i in first structure
+        p_1[i] = c1.bit_count() / n
+        # Loop over all communities in the second structure
+        for j in range(size_2):
+            c2 = comm_2[j]
+            # Probability to be in community j in second structure
+            p_2[j] = c2.bit_count() / n
+            # Probability to be in community i in first structure and community j in second structure
+            p_12 = (c1 & c2).bit_count() / n
+
+            # Ignore zero probability (assume 0 log 0 = 0)
+            if p_12:
+                mutual_inf += (p_12 * np.log2(p_12 / (p_1[i] * p_2[j])))
+    
+    # Calculate the normalized mutual information
+    if normalize:
+        # Normalized I(x,y) = 1/2 *  I(x,y) / [H(x) + H(y)]
+        entropy_1 = entropy(p_1)
+        entropy_2 = entropy(p_2)
+        mutual_inf /= (0.5 * (entropy_1 + entropy_2))
+    
+    return mutual_inf

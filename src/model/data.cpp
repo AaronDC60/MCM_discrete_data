@@ -4,9 +4,13 @@ vector<vector<int>> data_processing(string file, int n){
     // Open file
     ifstream myfile(file);
 
+    // Store dataset as vector of strings
+    vector<vector<int>> data;
+
     // Check if file exists
     if (myfile.fail()){
         cout << "Not able to open the file." << endl;
+        return data;
     }
 
     // Read out first line
@@ -15,9 +19,6 @@ vector<vector<int>> data_processing(string file, int n){
 
     // Number of variables
     line = line.substr(0, n);
-
-    // Store dataset as vector of strings
-    vector<vector<int>> data;
 
     vector<int> observation;
     for (int i = 0; i < n; i++) {

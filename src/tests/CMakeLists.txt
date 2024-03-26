@@ -20,7 +20,16 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
                  EXCLUDE_FROM_ALL)
 
 
-add_executable(testing test_partition.cpp test_evidence.cpp test_data.cpp test_model.cpp test_search.cpp)
-target_link_libraries(testing gtest_main Model Search_Algorithms)
+add_executable(testing 
+              test_partition.cpp
+              test_evidence.cpp
+              test_data.cpp
+              test_model.cpp
+              test_spin_op.cpp
+              test_gt.cpp
+              test_search.cpp
+              test_sbm.cpp)
+
+target_link_libraries(testing gtest_main Model Search_Algorithms SBM)
 
 add_test(NAME testing COMMAND testing)

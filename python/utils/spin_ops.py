@@ -4,6 +4,7 @@ Functions related to spin operators
 """
 
 import numpy as np
+from . import tools
 
 def generate_all_ops(n_var, q=2):
     """
@@ -134,3 +135,114 @@ def get_spin_op_indices(q, vars, color):
         index2 += (-color[i] % q) * q**var
     
     return index1, index2
+
+def spin_value(state, op, q):
+    """
+    Calculate the spin value for a given state and operator.
+
+    Parameters
+    ----------
+    state : array
+        list with the value of every variable
+    op : int
+        integer representation of the operator
+    q : int
+        total number of states
+    
+    Returns
+    -------
+    s : int
+        spin value
+    """
+    # s = sum(alpha_j * mu_j)
+    s = 0
+    # read alpha from left to right
+    j = 0
+    while op:
+        s += state[j] * (op % q)
+
+        op //= q
+        j += 1
+    return s % q
+
+def entropy_of_operator(data, op, q):
+    """
+    Calculate the entropy of an operator for a given dataset.
+
+    Parameters
+    ----------
+    data : array
+        list of the observations represented as arrays
+    op : int
+        integer representation of the operator
+    q : int
+        total number of states
+
+    Returns
+    -------
+    entropy : float
+        entropy of the operator
+    """
+    # Variable for probability distribution
+    p = np.zeros(q)
+
+    for obs in data:
+        # Determine the value of the spin operator
+        value = spin_value(obs, op, q)
+        # Increase number of occurences of that value by 1
+        p[value] += 1
+    
+    p /= len(data)
+    # Calculate the entropy of this distribution
+    return tools.entropy(p)
+
+def comb_ops(op_nu, op_mu, q, cc=False):
+    """
+    Calculate the product of two spin operators (phi_nu * phi_mu).
+    
+    Takes in the integer representation of two spin operators.
+    If complex_conjugate (cc) is true, the product phi_nu * phi_(-mu) is also returned.
+
+    Parameters
+    ----------
+    op1 : int
+        integer representation of the first operator (phi_nu)
+    op2 : int
+        integer representation of the second operator (phi_mu)
+    q : int
+        total number of states
+    cc : boolean, default False
+        option to calculate phi_nu * phi_(-mu) as well
+
+    Returns
+    -------
+    comb_op : int
+        integer representation of phi_nu * phi_mu
+    comb_op_cc : int, returned if cc is True
+        integer representation of phi_nu * phi_(-mu)
+    """
+    # phi_nu * phi_mu
+    comb_op = 0
+    if cc:
+        # phi_nu * phi_(-mu)
+        comb_op_cc = 0
+
+    # Base^(j-th bit)
+    factor = 1
+    while op_nu or op_mu:
+        # j-th bit value is the remainder
+        nu_j = op_nu % q
+        mu_j = op_mu % q
+
+        comb_op += ((nu_j + mu_j) % q) * factor
+        if cc:
+            comb_op_cc += ((nu_j - mu_j) % q) * factor
+
+        # Update
+        factor *= q
+        op_nu //= q
+        op_mu //= q
+    
+    if cc:
+        return comb_op, comb_op_cc
+    return comb_op

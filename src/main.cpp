@@ -1,5 +1,6 @@
 #include "model/model.h"
 #include "search_algorithms/search.h"
+#include "stoch_block_model/sbm.h"
 
 #include <chrono>
 
@@ -11,6 +12,9 @@ int main(int argc, char* argv[]){
     string file;
     int q = 0;
     int n = 0;
+
+    // Gauge transformation
+    bool gt = false;
 
     // Search method
     bool log_file = false;
@@ -38,6 +42,10 @@ int main(int argc, char* argv[]){
         if (arg == "-l"){
             log_file = true;
         }
+        // Gauge transformation
+        if (arg == "-gt"){
+            gt = true;
+        }
         // Search method
         if (arg == "-es"){
             exhaustive = true;
@@ -64,14 +72,20 @@ int main(int argc, char* argv[]){
     // Read in data
     vector<vector<int>> data;
     data = data_processing(path, n);
+    if(data.size() == 0){return 1;}
     // Construct mcm model
     mcm model = create_model(data, q, n, log_file);
 
     // Create output file
     ofstream outputFile(file + "_output.dat");
 
+    // Gauge transformation
+    if (gt){
+        find_best_basis(model);
+        transform_data(model.data, model.best_basis, q, n);
+    }
+    // Exhaustive search
     if (exhaustive){
-        // Exhaustive search
         auto start = std::chrono::high_resolution_clock::now();
         exhaustive_search(model);
         auto stop = std::chrono::high_resolution_clock::now();
@@ -87,8 +101,8 @@ int main(int argc, char* argv[]){
         outputFile << "Best log-evidence: " << model.best_evidence << "\n" << '\n';
     }
 
+    // Greedy search
     if (greedy){
-        // Greedy search
         model.best_mcm.clear();
         if(log_file){
             model.greedy_file.open(file + "_greedy_search.dat");
@@ -109,8 +123,8 @@ int main(int argc, char* argv[]){
         outputFile << "Best log-evidence: " << model.best_evidence << "\n" <<endl;
     }
 
+    // Divide and conquer
     if (div_and_conq){
-        // Divide and conquer
         model.best_mcm.clear();
         if(log_file){
             model.divide_and_conquer_file.open(file + "_divide_and_conquer.dat");
