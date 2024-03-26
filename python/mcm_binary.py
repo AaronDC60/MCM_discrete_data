@@ -117,7 +117,7 @@ class mcm:
         final_mcm : list
             variable to store the resulting MCM
         print_search : boolean, default False
-            Option to print all the encounterd MCMs and their evidence
+            option to print all the encounterd MCMs and their evidence
         """
         # Variable to store best MCM after split (even if no overall improvement occured)
         tmp_best_mcm = mcm
@@ -248,7 +248,7 @@ class mcm:
         method : str, default 'exhaustive'
             Searching method (options: 'exhaustive', 'greedy', 'divide_and_conquer')
         print_search : boolean, default False
-            Option to print all the encounterd MCMs and their evidence
+            option to print all the encounterd MCMs and their evidence
 
         Returns
         -------

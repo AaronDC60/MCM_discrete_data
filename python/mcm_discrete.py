@@ -8,6 +8,8 @@ import copy
 
 from python.data import read_in
 from python.utils import tools
+from python.utils import spin_ops
+from python.utils import transformations
 
 class mcm:
 
@@ -35,11 +37,34 @@ class mcm:
         self.best_evidence = 0
 
         # Storage for best IM
-        self.best_im = None
+        self.best_im = np.zeros(self.n_var, dtype=int)
 
     def reset_data(self):
         """Transform data back to the original data."""
         self.data, _ = read_in.process_data_array(self.file)
+
+    def transform_data(self, gt=None):
+        """
+        Perform a Gauge transformation on the data.
+        Data is transformed in place.
+
+        Parameters
+        ----------
+        gt : array
+            List with the gauge transformation, default is the best IM
+        """
+        if gt is None:
+            gt = self.best_im
+        else:
+            # Check if gt is valid
+            if type(gt) != list and type(gt) != np.ndarray:
+                raise TypeError("The parameter 'gt' should be a list.")
+        
+        new_data = np.empty(self.data.shape)
+        # Transform every observation in the data
+        for i, obs in enumerate(self.data):
+            new_data[i] = transformations.gt_state_discrete(obs, gt, self.q)
+        self.data = new_data
     
     def calc_log_evidence(self, mcm):
         """
@@ -69,6 +94,60 @@ class mcm:
         
         return evidence
     
+    def find_best_im(self):
+        """
+        Find the best independent model (im) for the data.
+        
+        Returns
+        -------
+        best_im : array
+            list with the integer representation of the n operators forming the best basis
+        """
+        # All combinations that can be formed with the operators in th IM (to check independence)
+        all_comb = [0]
+
+        # All possible spin operators (q^n - 1)
+        all_ops = np.arange(1, self.q**self.n_var)
+
+        # Calculate and store the entropy for all operators
+        entropy = np.empty((len(all_ops), 2))
+        for i, op in enumerate(all_ops):
+            entropy[i, 0] = op
+            entropy[i, 1] = spin_ops.entropy_of_operator(self.data, op, self.q)
+        
+        # Sort operators based on entropy from low to high
+        operators = entropy[np.argsort(entropy[:,1])][:,0]
+
+        # Search the n most biased operators that are independent
+        i = 0
+        for op_mu in operators:
+            # Check if the operator is independent from the previously found operators
+            combinations = []
+            for op_nu in all_comb:
+                # Combine the operators (also with the complex conjugate)
+                new_ops = spin_ops.comb_ops(op_nu, op_mu, self.q, cc=True)
+                combinations.append(new_ops[0])
+                combinations.append(new_ops[1])
+                # Check independence
+                if 0 in combinations:
+                    break
+
+            # Go to the next operator if this one is not independent
+            if 0 in combinations:
+                continue
+            # Otherwise, add to IM
+            self.best_im[i] = op_mu
+            all_comb += combinations
+            i += 1
+
+            # Stop search if n independent operators are found
+            if i == self.n_var:
+                break
+        # Represent the data in this basis
+        self.transform_data(self.best_im)
+
+        return self.best_im
+
     def divide_and_conquer(self, mcm, final_mcm, print_search=False):
         """
         Finding best MCM using the divide and conquer approach.
@@ -139,7 +218,7 @@ class mcm:
     
     def find_best_mcm(self, method='exhaustive', print_search=False):
         """
-        Find the best mcm for the data
+        Find the best mcm for the data.
 
         Parameters
         ----------
