@@ -1,0 +1,31 @@
+Exhaustive search: 93170ms 
+
+Number of best MCMs found : 1
+
+Best MCM(s): 
+Community 0 : 11100011000000
+Community 1 : 00011100000000
+Community 2 : 00000000111100
+Community 3 : 00000000000011
+
+Best log-evidence: -1.946e+06
+
+Greedy search: 1574ms 
+
+Best MCM: 
+Community 0 : 11100011000000
+Community 1 : 00011100000000
+Community 2 : 00000000111100
+Community 3 : 00000000000011
+Best log-evidence: -1.946e+06
+
+Divide and conquer: 1133ms 
+
+Best MCM: 
+Community 0 : 11100011000000
+Community 1 : 00011100000000
+Community 2 : 00000000101000
+Community 3 : 00000000010111
+Best log-evidence: -1.95032e+06
+
+Search done
