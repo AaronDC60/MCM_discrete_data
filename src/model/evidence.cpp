@@ -14,7 +14,6 @@ unordered_map<int, int> count_observations(mcm& model, int community){
         j = community;
         while(j){
             if (j & 1){
-                //state += (obs[i] * pow(model.q, i));
                 state += (obs[i] * model.pow_q[i]);
             }
             i++;
@@ -65,8 +64,6 @@ double calc_evidence(vector<int> partition, mcm& model){
     // Iterate over all the ICCs in the partition
     for (int community : partition){
         if (community){
-            //r = community_size(community);
-            //log_evidence += calc_evidence_icc(community, model, r);
             log_evidence += get_evidence_icc(community, model);
         }
     }
