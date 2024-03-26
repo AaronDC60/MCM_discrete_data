@@ -1,0 +1,1 @@
+add_library(SBM sbm.cpp data.cpp)
